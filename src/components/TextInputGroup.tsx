@@ -19,7 +19,7 @@ function BaseTextInputGroup(props: TextInputGroupProps) {
       <div className="input-group-subtitle">{ props.subtitle }</div>
       {
         props.area? 
-        <textarea onChange={ (e) => { regaFormState.set(props.name, e.target.value) } }>{regaFormState[props.name]}</textarea>
+        <textarea onChange={ (e) => { regaFormState.set(props.name, e.target.value) } } placeholder={props.placeholder}>{regaFormState[props.name]}</textarea>
         :
         <input onChange={ (e) => { regaFormState.set(props.name, e.target.value) } } type="text" name={props.name} placeholder={props.placeholder} value={regaFormState[props.name]}/>
       }

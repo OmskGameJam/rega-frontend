@@ -75,6 +75,11 @@ section {
   color: white;
 }
 
+textarea {
+  width: 75%;
+  height: 100px;
+}
+
 .radio-options {
   display: flex;
   flex-direction: column;

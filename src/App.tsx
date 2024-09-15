@@ -1,6 +1,5 @@
 import { TextInputGroup } from './components/TextInputGroup'
 import { RadioGroup } from './components/RadioGroup'
-import { sender } from './stores/Sender'
 import { ButtonRegister } from './components/ButtonRegister'
 
 export function App() {
@@ -77,7 +76,7 @@ export function App() {
             name='teamMembers'
             title='Расскажите о свой команде!'
             subtitle='Кто вы, что вы делаете, всё что угодно'
-            placeholder='Новая команда (3)'
+            placeholder='Мы - Новая Команда (1), с нами: &#10;&#10;Олег - Разработчик штук, игрец на гитаре &#10;Олег (1) - Дизайнер штук, колбасит соло &#10;Олег (2) - Олег'
             area
           />
           <RadioGroup
