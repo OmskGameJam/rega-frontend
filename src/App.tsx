@@ -1,35 +1,35 @@
-// import './reset.css'
-import './App.css'
 import { TextInputGroup } from './components/TextInputGroup'
 import { RadioGroup } from './components/RadioGroup'
+import { sender } from './stores/Sender'
+import { ButtonRegister } from './components/ButtonRegister'
 
-function App() {
+export function App() {
   return (
     <>
-      <h1>
+      <center>
+        <img src="jar.png" />
+      </center>
+      <h1 className='text-outline d-box'>
         Игровое Варенье!
       </h1>
       <main>
-        <p>
-          <h2>
-            Регистрация на Омское Игровое Варенье №3
-          </h2>
-        </p>
-        <p>
-          Игровое варенье - это омский хакатон по разработке ИГР.<br/>
-          Собираемся 17 августа в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
-        </p>
-        <p>
-          Мы соберёмся разрабатывать игры в своё удовольствие, без привязки к какому-то мировому джему!<br/> Например, мы точно не связаны с GMTK-2024, который будет проходить в те же дни. И тем более не связаны с Magical Girl Game Jam #10
-        </p>
-        <p>
-          Можно участвовать в соло или в команде из 2..10 человек.
-        </p>
-        <p>
-          <h3>
+        <div className='d-box'>
+          <p>
+            Игровое варенье - это омский хакатон по разработке ИГР.<br/>
+            Собираемся 17 августа в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
+          </p>
+          <p>
+            Мы соберёмся разрабатывать игры в своё удовольствие, без привязки к какому-то мировому джему!<br/> Например, мы точно не связаны с GMTK-2024, который будет проходить в те же дни. И тем более не связаны с Magical Girl Game Jam #10
+          </p>
+          <p>
+            Можно участвовать в соло или в команде из 2..10 человек.
+          </p>  
+        </div>
+        <section>
+          <h3 className='d-box d-box-black'>
             Расписание
           </h3>
-          <div>
+          <div className='d-box'>
             <h4>Суббота 17 августа:</h4>
             <ul>
               <li>Анонс темы хакатона в 9:00 в чате https://t.me/omsky_gamedev</li>
@@ -39,7 +39,7 @@ function App() {
               <li>Уходим домой в 20:00</li>
             </ul>
           </div>
-          <div>
+          <div className='d-box'>
             <h4>Суббота 17 августа:</h4>
             <ul>
               <li>Открытие Точки в 10:00</li>
@@ -49,61 +49,79 @@ function App() {
               <li>Афтепати в Биркиндоме в 21:00</li>
             </ul>
           </div>
-        </p>
+        </section>
+        <h2 className='text-outline'>
+          Регистрация на Омское Игровое Варенье №3
+        </h2>
         <div>
           <TextInputGroup 
-            name='team-name'
+            name='teamName'
             title='Название вашей команды'
             subtitle='Например, "Зайчики-попрыгайчики" или "Новая команда (1)"'
-            value='Новая команда (3)'
+            placeholder='Новая команда (3)'
             required={true}
           />
           <TextInputGroup 
-            name='team-name'
-            title='Название вашей команды'
-            subtitle='Например, "Зайчики-попрыгайчики" или "Новая команда (1)"'
-            value='Новая команда (3)'
+            name='teamExperience'
+            title='Какой у вас опыт в написании игр?'
+            subtitle='Не важно, много его у вас или мало, нам просто интересно :)'
+            placeholder='0-3 года'
           />
           <TextInputGroup 
-            name='team-name'
-            title='Название вашей команды'
-            subtitle='Например, "Зайчики-попрыгайчики" или "Новая команда (1)"'
-            value='Новая команда (3)'
-          />
-          <RadioGroup
-            name='gde-nahui'
-            title='Где планируете хакатонить?'
-            subtitle=''
-            options={['Из дома', 'Из офиса Тчк. Кип. Ж', 'Из дома, а потом приду в точку на ярмарку']}
+            name='teamContacts'
+            title='Оставьте ваши контакты'
+            subtitle='ВКонтакте, Телегарам, Мой Мир Mail.RU, в какое окно кидать камень'
+            placeholder='телеграм: @oleg_gaming'
           />
           <TextInputGroup 
-            name='team-name'
-            title='Название вашей команды'
-            subtitle='Например, "Зайчики-попрыгайчики" или "Новая команда (1)"'
-            value='Новая команда (3)'
+            name='teamMembers'
+            title='Расскажите о свой команде!'
+            subtitle='Кто вы, что вы делаете, всё что угодно'
+            placeholder='Новая команда (3)'
+            area
           />
           <RadioGroup
-            name='gde-nahui'
+            name='location'
             title='Где планируете хакатонить?'
-            subtitle=''
-            options={['Из дома', 'Из офиса Тчк. Кип. Ж', 'Из дома, а потом приду в точку на ярмарку']}
+            subtitle='Можно откуда угодно, но с нами - веселее'
+            options={['С нами, из Точки Кипения на Жукова 21', 'Из дома', 'Из дома, а потом приду в точку на ярмарку']}
           />
           <RadioGroup
-            name='gde-nahui'
-            title='Где планируете хакатонить?'
-            subtitle=''
-            options={['Из дома', 'Из офиса Тчк. Кип. Ж', 'Из дома, а потом приду в точку на ярмарку']}
+            name='category'
+            title='Категория участия'
+            subtitle='Это важно для мирового Ludum Dare'
+            options={[
+              'Jam: Сольное участие. Одинокий волк, пишет всё с нуля.',
+              'Compo: Командное участие. Вас много (или вы Наруто), можно использовать заготовки.'
+            ]}
+          />
+          <TextInputGroup
+            name='engine'
+            title='На чём планируете делать игру?'
+            subtitle='Unity? Godot? Свой движок, или что-то совсем серьёзное?'
+            placeholder='Unreal Bomjine 2'
+          />
+          <TextInputGroup
+            name='kek'
+            title='Наконец, дайте совет остальным участникам'
+            subtitle='Пейте водичку и ложитесь спать вовремя!'
+            placeholder='Да'
           />
           <RadioGroup
-            name='gde-nahui'
-            title='Где планируете хакатонить?'
-            subtitle=''
-            options={['Из дома', 'Из офиса Тчк. Кип. Ж', 'Из дома, а потом приду в точку на ярмарку']}
+            name='joined'
+            title=<>Я зашёл в чат <a href='https://t.me/omsky_gamedev'>@omsky_gamedev</a> и прочитал о формате <a href='https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48'>Игрового Джема</a></>
+            subtitle='Это важно для мирового Ludum Dare'
+            options={[
+              'Да',
+              'Пока ещё нет'
+            ]}
           />
+          <center>
+            <ButtonRegister />
+          </center>
         </div>
       </main>
     </>
   )
 }
-
 export default App

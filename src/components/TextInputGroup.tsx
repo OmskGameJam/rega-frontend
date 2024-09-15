@@ -1,20 +1,30 @@
+import { observer } from "mobx-react-lite";
 import { Children } from "../helpers/types";
+import { RegaFormKey, regaFormState } from "../stores/RegaFormState";
 
 interface TextInputGroupProps {
-  title: string, 
-  subtitle: string,
-  name: string,
-  value: string, 
+  title: string | JSX.Element, 
+  subtitle: string | JSX.Element,
+  name: RegaFormKey,
+  placeholder: string, 
   children?: Children
   required?: boolean
+  area?: boolean
 }
 
-export function TextInputGroup(props: TextInputGroupProps) {
-  return <p>
-    <label className="input-group text-group">
-      <span>{ props.title } { props.required ? <span className="required-tick">*</span> : '' }</span>
-      <span>{ props.subtitle }</span>
-      <input type="text" name={props.name} value={props.value}/>
+function BaseTextInputGroup(props: TextInputGroupProps) {
+  return <div className="input-group d-box d-box-black">
+    <label className="text-group">
+      <div className="input-group-title">{ props.title } { props.required ? <span className="required-tick">*</span> : '' }</div>
+      <div className="input-group-subtitle">{ props.subtitle }</div>
+      {
+        props.area? 
+        <textarea onChange={ (e) => { regaFormState.set(props.name, e.target.value) } }>{regaFormState[props.name]}</textarea>
+        :
+        <input onChange={ (e) => { regaFormState.set(props.name, e.target.value) } } type="text" name={props.name} placeholder={props.placeholder} value={regaFormState[props.name]}/>
+      }
     </label>
-  </p>
+  </div>
 }
+
+export const TextInputGroup = observer(BaseTextInputGroup)
