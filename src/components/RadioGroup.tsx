@@ -16,7 +16,7 @@ function BaseRadioGroup(props: RadioGroupOptions) {
         { props.options.map( (option, idx) => {
           return <label>
             <input key={idx} onChange={ (v) => { regaFormState.set(props.name, v.target.value)  } } type="radio" name={props.name} value={option} />
-            <span> { option } </span>
+            <div> { option } </div>
           </label>
         }) }
       </div>

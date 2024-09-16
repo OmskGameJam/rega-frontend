@@ -12,7 +12,7 @@ export class Sender {
   async send() {
     this.regaSending = true;
     try {
-      await axios.post('http://localhost', regaFormState)
+      await axios.post(import.meta.env.REGA_BACK_URL + '/rega', regaFormState)
     } catch (e) {
       alert('Что-то пошло не так!')
       console.error(e)
