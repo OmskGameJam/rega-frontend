@@ -33,6 +33,7 @@ export function Register() {
       subtitle='Кто вы, что вы делаете, всё что угодно'
       placeholder='Мы - Новая Команда (1), с нами: &#10;&#10;Олег - Разработчик штук, игрец на гитаре &#10;Олег (1) - Дизайнер штук, колбасит соло &#10;Олег (2) - Олег'
       area
+      maxlen={400}
     />
     <RadioGroup
       name='where'
@@ -64,12 +65,14 @@ export function Register() {
       title='Как будете готовиться?'
       subtitle='Читать литературу? Разминаться? Спать?'
       placeholder='Прочитаю мангу про бетон и лягу спать в 7 утра'
+      maxlen={128}
     />
     <TextInputGroup
       name='advice'
       title='Наконец, дайте совет остальным участникам'
       subtitle='Пейте водичку и ложитесь спать вовремя!'
       placeholder='Да'
+      maxlen={128}
     />
     <RadioGroup
       name='joined'

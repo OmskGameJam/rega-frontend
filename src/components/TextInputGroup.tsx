@@ -11,12 +11,15 @@ interface TextInputGroupProps {
   children?: Children
   required?: boolean
   area?: boolean
+  maxlen?: number
 }
 
 function BaseTextInputGroup(props: TextInputGroupProps) {
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    regaFormState.set(props.name, e.target.value)
+    const text = e.target.value.slice(0,props.maxlen ?? 64);
+
+    regaFormState.set(props.name, text)
     regaFormValidityState.set(props.name, true)
   }
 
@@ -31,7 +34,7 @@ function BaseTextInputGroup(props: TextInputGroupProps) {
       <div className="input-group-subtitle">{ props.subtitle }</div>
       {
         props.area? 
-        <textarea onChange={onChange}></textarea>
+        <textarea onChange={onChange} value={regaFormState[props.name]}></textarea>
         :
         <input onChange={onChange} type="text" name={props.name} placeholder={props.placeholder} value={regaFormState[props.name]}/>
       }
