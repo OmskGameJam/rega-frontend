@@ -3,14 +3,15 @@ import { makeAutoObservable } from "mobx";
 export type RegaFormKey = keyof Omit<RegaFormState, "set">
 
 class RegaFormState {
-  teamName: string = ''
-  teamExperience: string = ''
-  teamContacts: string = ''
-  teamMembers: string = ''
+  name: string = ''
+  exp: string = ''
+  contact: string = ''
+  where: string = ''
   category: string = ''
-  location: string = ''
-  engine: string = ''
-  kek: string = ''
+  members: string = ''
+  advice: string = ''
+  prepare: string = ''
+  tech: string = ''
   joined: string = ''
 
   set(key: RegaFormKey, value: string) {

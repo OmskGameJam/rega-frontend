@@ -6,7 +6,18 @@ body {
   font-style: normal;
   /* font-variation-settings:
     "wdth" 87.5; */
-  background-color: skyblue;
+  background: url("/temp-background.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+#root {
+  margin-top: -40px;
+  padding-top: 40px;
+  background-color: rgba(0,0,0,0.1);
+  margin-bottom: -40px;
+  padding-bottom: 40px;
 }
 
 p {
@@ -57,7 +68,7 @@ section {
 
 .input-group-subtitle {
   font-size: 15px;
-  color: #ffffff47;
+  color: #ffffff82;
   margin-bottom: 15px;
 }
 
@@ -113,12 +124,12 @@ button.d-box {
   color: yellow;
 }
 
-button.d-box.active {
+.d-box.active {
   border-image-source: url("/border-highlight.png")
 }
 
 ::placeholder {
-  color: #ffffff47;
+  color: #ffffff82;
   opacity: 1; /* Firefox */
   overflow: none;
 }
@@ -173,7 +184,22 @@ li:first-of-type {
   }
 }
 
+.team-masonry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.team-masonry > div {
+  word-wrap: break-word;
+  overflow: auto;
+}
+
 @media screen and (max-width: 1024px) {
+
+  .team-masonry {
+    display: flex;
+    flex-direction: column;
+  }
 
   .logo {
     width: 90vw;
