@@ -67,7 +67,7 @@ export function Register() {
     />
     <RadioGroup
       name='joined'
-      title=<>Я зашёл в чат <a href='https://t.me/omsky_gamedev'>@omsky_gamedev</a> и прочитал о формате <a href='https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48'>Игрового Джема</a></>
+      title=<>Я зашёл в чат <a target='_blank' href='https://t.me/omsky_gamedev'>@omsky_gamedev</a> и прочитал о формате <a target='_blank' href='https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48'>Игрового Джема</a></>
       subtitle='Это важно для мирового Ludum Dare'
       options={[
         { long: 'Да', short: 'Да' }
