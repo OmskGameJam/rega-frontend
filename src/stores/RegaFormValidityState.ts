@@ -6,7 +6,6 @@ class RegaFormValidityState {
   exp: boolean = true
   contact: boolean = true
   where: boolean = true
-  category: boolean = true
   members: boolean = true
   advice: boolean = true
   prepare: boolean = true

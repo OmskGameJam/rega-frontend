@@ -45,15 +45,6 @@ export function Register() {
         { long: 'Из дома, а потом приду в точку на ярмарку', short: 'И там, и там'}
       ]}
     />
-    <RadioGroup
-      name='category'
-      title='Категория участия'
-      subtitle='Это важно для мирового Ludum Dare'
-      options={[
-        { long: 'Jam: Сольное участие. Одинокий волк, пишет всё с нуля.', short: 'Jam' }, 
-        { long: 'Compo: Командное участие. Вас много (или вы Наруто), можно использовать заготовки.', short: 'Compo' }
-      ]}
-    />
     <TextInputGroup
       name='tech'
       title='На чём планируете делать игру?'

@@ -3,10 +3,23 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "безымянный.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
+        "Overworld.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        },
+        "безымянный.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 361.66666666666663,
+                "y": 482
+            }
+        }
     },
     "last.imagePath": "E:/Projects/gamejam3/rega-frontend/asset-src",
     "map.height": 50,
@@ -15,9 +28,13 @@
     "map.tileWidth": 16,
     "map.width": 80,
     "openFiles": [
+        "безымянный.tmx",
+        "Overworld.tsx"
     ],
     "project": "bg.tiled-project",
     "recentFiles": [
+        "Overworld.tsx",
+        "безымянный.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

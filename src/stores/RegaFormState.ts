@@ -7,7 +7,6 @@ class RegaFormState {
   exp: string = ''
   contact: string = ''
   where: string = ''
-  category: string = ''
   members: string = ''
   advice: string = ''
   prepare: string = ''

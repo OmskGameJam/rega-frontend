@@ -43,9 +43,8 @@ export function Teams() {
               <div> <b>Название: </b>  { t.name } </div>
               <br />
               <div> <b>Опыт: </b> { t.exp } </div>
+              <div> <b>Класс: </b>  { t.tech } </div>
               <div> <b>Контакты: </b>  { t.contact } </div>
-              <div> <b>Класс: </b>  { t.category } </div>
-              <div> <b>Стек: </b>  { t.tech } </div>
               <div> <b>Где хакатонит:</b>  { t.where } </div>
               <br />
               <div> <b>Участники: </b> { t.members } </div>
