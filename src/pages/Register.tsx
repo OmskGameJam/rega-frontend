@@ -6,7 +6,7 @@ export function Register() {
   return <>
   <section>
     <h2 className='text-outline d-box d-box-black'>
-      Регистрация на Омское Игровое Варенье №3
+      Регистрация команды
     </h2>
     <TextInputGroup 
       name='name'
