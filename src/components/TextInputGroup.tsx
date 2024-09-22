@@ -19,7 +19,7 @@ function BaseTextInputGroup(props: TextInputGroupProps) {
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const text = e.target.value.slice(0,props.maxlen ?? 64);
 
-    regaFormState.set(props.name, text)
+    regaFormState.set(props.name, text.trimStart()) // Не позволяем вводить тупо пробелы
     regaFormValidityState.set(props.name, true)
   }
 

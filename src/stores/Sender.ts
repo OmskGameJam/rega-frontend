@@ -16,11 +16,13 @@ export class Sender {
     let firstInvalidInputName: string | undefined
     
     for (const k in regaFormState) {
-      const v = regaFormState[k as RegaFormKey]
-      if (typeof v == 'string')  {
-        if (v.length < 1) {
-          regaFormValidityState.set(k as RegaFormKey, false)
-          if (!firstInvalidInputName) firstInvalidInputName = k
+      const key = k as RegaFormKey
+      const value = regaFormState[key]
+      if (typeof value == 'string')  {
+        regaFormState.set(key, value.trim()) // Авто trim
+        if (regaFormState[key].length < 1) {
+          regaFormValidityState.set(key, false)
+          if (!firstInvalidInputName) firstInvalidInputName = key
           willSend = false;
         }
       }
