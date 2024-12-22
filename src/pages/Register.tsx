@@ -40,9 +40,9 @@ export function Register() {
       title='Где планируете хакатонить?'
       subtitle='Можно откуда угодно, но с нами - веселее'
       options={[
-        { long: 'С нами, из Точки Кипения на Жукова 21', short: 'Из Точки' }, 
+        { long: 'С нами, из офиса 7bits на Таубе 5', short: 'Из офиса' }, 
         { long: 'Из дома', short: 'Из дома' },
-        { long: 'Из дома, а потом приду в точку на ярмарку', short: 'И там, и там'}
+        { long: 'Из дома, а потом приду в офис на ярмарку', short: 'И там, и там'}
       ]}
     />
     <TextInputGroup
@@ -68,7 +68,7 @@ export function Register() {
     <RadioGroup
       name='joined'
       title=<>Я зашёл в чат <a target='_blank' href='https://t.me/omsky_gamedev'>@omsky_gamedev</a> и прочитал о формате <a target='_blank' href='https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48'>Игрового Джема</a></>
-      subtitle='Это важно для мирового Ludum Dare'
+      subtitle=''
       options={[
         { long: 'Да', short: 'Да' }
       ]}

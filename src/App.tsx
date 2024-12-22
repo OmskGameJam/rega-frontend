@@ -48,7 +48,7 @@ export function App() {
             openInfo && (
               <div className='ras'>
                 <div style={{ gridArea: '1 / 1 / 2 / 2' }} className='d-box'>
-                  <h4>Суббота 5 октября:</h4>
+                  <h4>Суббота 4 января:</h4>
                   <ul>
                     <li>Анонс темы хакатона в 9:00 в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
                     <li>Открытие офиса в 10:00</li>
@@ -58,7 +58,7 @@ export function App() {
                   </ul>
                 </div>
                 <div style={{ gridArea: '1 / 2 / 2 / 3' }} className='d-box'>
-                  <h4>Воскресенье 6 октября:</h4>
+                  <h4>Воскресенье 5 января:</h4>
                   <ul>
                     <li>Открытие офиса в 10:00</li>
                     <li>Делаем игры</li>
@@ -69,7 +69,7 @@ export function App() {
                 </div>
                 <div style={{ gridArea: '2 / 1 / 3 / 3' }} className='d-box'>
                   <div>
-                    <div>Место: <b>Точка Кипения Омск</b></div>
+                    <div>Место: <b>офис 7bits</b></div>
                     <div>Адрес: Омск, улица Таубе, 5</div>
                     <br /><br />
                   </div>
