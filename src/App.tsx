@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Register } from './pages/Register'
 import { Map, Placemark, YMaps } from '@r3flector/react-yandex-maps'
 import { Teams } from './pages/Teams'
+import Snowfall from 'react-snowfall'
+import { genSnowflakes } from './crap/snowflakes'
 
 export function App() {
 
@@ -10,6 +12,7 @@ export function App() {
   return (
     <>
       <main>
+        <Snowfall style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/>
         <section>
           <center>
             <img className='logo' src="jar.png" />
