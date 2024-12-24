@@ -1,0 +1,1 @@
+export const YM_COUNTER = parseInt(import.meta.env.YM_COUNTER)

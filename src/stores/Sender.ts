@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { RegaFormKey, regaFormState } from "./RegaFormState";
 import { regaFormValidityState } from "./RegaFormValidityState";
 import { globalAxios } from "../net/axios";
+import { YM_COUNTER } from "../helpers/constants";
 
 export class Sender {
   regaSending: boolean
@@ -36,6 +37,7 @@ export class Sender {
     this.regaSending = true;
     try {
       const res = await globalAxios.post('/rega', JSON.stringify(regaFormState))
+      ym(YM_COUNTER, "reachGoal", "rega")
       window.localStorage.setItem('my-team', JSON.parse(res.data).id)
       window.location.pathname = '/teams'
     } catch (e) {

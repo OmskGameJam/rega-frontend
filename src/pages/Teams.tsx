@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { globalAxios } from "../net/axios"
+import { YM_COUNTER } from "../helpers/constants"
 
 interface ITeamData {
   id: number
@@ -18,7 +19,7 @@ export function Teams() {
   const [loadingState, setLoadingState] = useState(true)
   const [teams, setTeams] = useState<ITeamData[]>([])
   const [activeTeam, setActiveTeam] = useState(0);
-
+  ym(YM_COUNTER,'reachGoal','view-teams')
   useEffect(() => {
     globalAxios.get('/rega')
       .then((d) => {

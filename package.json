@@ -12,6 +12,7 @@
   "dependencies": {
     "@r3flector/react-yandex-maps": "^1.2.7",
     "@types/axios": "^0.14.0",
+    "@types/yandex-metrika-tag": "^2.0.7",
     "axios": "^1.7.7",
     "mobx": "^6.13.2",
     "mobx-react-lite": "^4.0.7",
