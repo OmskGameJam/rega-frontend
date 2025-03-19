@@ -1,10 +1,10 @@
 
 
-export function genSnowflakes() {
+export function  genSnowflakes() {
   const outArray: HTMLImageElement[] = [];
   for (let i = 1; i <= 16; i++) {
     const img: HTMLImageElement = document.createElement('img')
-    img.src = `/flakes/flake${i}.png`
+    img.src = `/petals/petals${i}.png`
     nPush<HTMLImageElement>(img, outArray, i)
   }
   return outArray

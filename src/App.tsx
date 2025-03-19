@@ -12,7 +12,7 @@ export function App() {
   return (
     <>
       <main>
-        <Snowfall style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/>
+        <Snowfall snowflakeCount={70} style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/>
         <section>
           <center>
             <img className='logo' src="jar.png" />
@@ -21,18 +21,15 @@ export function App() {
         <section>
 
           <h1 className='text-outline d-box'>
-            Игровое Варенье 4-5 января!
+            Омский Людум Даре 5-6 апреля!
           </h1>
           <div className='d-box'>
             <p>
-              <b><span>Игровое варенье</span></b> - это омский хакатон по разработке ИГР.<br />
-              Собираемся 4 января в 10:00 в офисе 7bits на Таубе 5 в городе Омске и пишем игру ДВА ДНЯ.
+              <b><span>Омский Людум Даре</span></b> - это омский хакатон по разработке ИГР.<br />
+              Собираемся 5 апреля в 10:00 в Точке Кипения на Маршала Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
             </p>
             <p>
-              Стартуем одновременно с <a target='_blank' href="https://minijamofficial.com/">Mini Jam </a><br />
-              <br />
-              В этот раз дудосим minijam. Это небольшой джем, мы делаем кучу ████████ игр, цель чтобы омские игры занимали половину всего списка игр. Make OMSK great again
-              <br />
+              Стартуем одновременно с <a target='_blank' href="https://ldjam.com/">мировым Ludum Dare 57</a><br />
             </p>
             <p>
               Можно участвовать в соло или в команде из 2..10 человек.
@@ -51,7 +48,7 @@ export function App() {
             openInfo && (
               <div className='ras'>
                 <div style={{ gridArea: '1 / 1 / 2 / 2' }} className='d-box'>
-                  <h4>Суббота 4 января:</h4>
+                  <h4>Суббота 5 апреля:</h4>
                   <ul>
                     <li>Анонс темы хакатона в 9:00 в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
                     <li>Открытие офиса в 10:00</li>
@@ -61,7 +58,7 @@ export function App() {
                   </ul>
                 </div>
                 <div style={{ gridArea: '1 / 2 / 2 / 3' }} className='d-box'>
-                  <h4>Воскресенье 5 января:</h4>
+                  <h4>Воскресенье 6 апреля:</h4>
                   <ul>
                     <li>Открытие офиса в 10:00</li>
                     <li>Делаем игры</li>
@@ -73,15 +70,15 @@ export function App() {
                 <div style={{ gridArea: '2 / 1 / 3 / 3' }} className='d-box'>
                   <div>
                     <div>Место: <b>офис 7bits</b></div>
-                    <div>Адрес: Омск, улица Таубе, 5</div>
+                    <div>Адрес: Омск, улица Маршала Жукова, 21</div>
                     <br /><br />
                   </div>
                   <YMaps query={{ apikey: '4d1af35d-5954-46a5-8f53-883add76bfbf' }}>
                     <Map height={300} defaultState={{
-                      center: [54.984152, 73.365241],
+                      center: [54.985396, 73.387089],
                       zoom: 17
                     }}>
-                      <Placemark geometry={[54.984152, 73.365241]} defaultProperties={{ iconCaption: 'Вход туташки!' }} />
+                      <Placemark geometry={[54.985396, 73.387089]} defaultProperties={{ iconCaption: 'Вход туташки!' }} />
                     </Map>
                   </YMaps>
                 </div>
@@ -91,9 +88,8 @@ export function App() {
                     <li>Геймплей - игра, в которую веселее или интереснее всего играть</li>
                     <li>Красота - игра с лучшим артом, лучшими шейдерами или попросту тесно сшитая</li>
                     <li>Звук - игра с лучшим звуковым оформлением, короче, Dolbit Normalno</li>
-                    <li>Доделай это - каждый интерпритирует эту номинацию по своему, но сюда тоже не каждая игра попадает. Попадёшь сюда - у твоей игры есть потенциал!</li>
-                    <li>Что это - никто не знает, что это, сюда попадают игры, которые <span>не такие, как все</span></li>
-                    <li>Эстэтишно - таинственная номинация от таинственного спонсора</li>
+                    <li><i>Ш</i>то это - никто не знает, что это, сюда попадают игры, которые <span>не такие, как все</span></li>
+                    <li>Вайбик - таинственная номинация от таинственного спонсора</li>
                   </ul>
                 </div>
               </div>
