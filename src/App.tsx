@@ -69,7 +69,7 @@ export function App() {
                 </div>
                 <div style={{ gridArea: '2 / 1 / 3 / 3' }} className='d-box'>
                   <div>
-                    <div>Место: <b>офис 7bits</b></div>
+                    <div>Место: <b>Точка Кипения Омск</b></div>
                     <div>Адрес: Омск, улица Маршала Жукова, 21</div>
                     <br /><br />
                   </div>
