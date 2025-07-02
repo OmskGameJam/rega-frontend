@@ -12,6 +12,8 @@ class RegaFormState {
   prepare: string = ''
   tech: string = ''
   joined: string = ''
+  public: boolean = true
+  hideteam: boolean = false
 
   set(key: RegaFormKey, value: string) {
     this[key] = value

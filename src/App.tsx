@@ -1,10 +1,11 @@
 
 import { useState } from 'react'
 import { Register } from './pages/Register'
+import { Privacy } from './pages/Privacy'
 import { Map, Placemark, YMaps } from '@r3flector/react-yandex-maps'
 import { Teams } from './pages/Teams'
-import Snowfall from 'react-snowfall'
-import { genSnowflakes } from './crap/snowflakes'
+// import Snowfall from 'react-snowfall'
+// import { genSnowflakes } from './crap/snowflakes'
 
 export function App() {
 
@@ -12,7 +13,7 @@ export function App() {
   return (
     <>
       <main>
-        <Snowfall snowflakeCount={70} style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/>
+        {/* <Snowfall snowflakeCount={70} style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/> */}
         <section>
           <center>
             <img className='logo' src="jar.png" />
@@ -21,18 +22,18 @@ export function App() {
         <section>
 
           <h1 className='text-outline d-box'>
-            Омский Людум Даре 5-6 апреля!
+            Омский Игровой Хакатон 2-3 августа!
           </h1>
           <div className='d-box'>
             <p>
-              <b><span>Омский Людум Даре</span></b> - это омский хакатон по разработке ИГР.<br />
-              Собираемся 5 апреля в 10:00 в Точке Кипения на Маршала Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
+              <b><span>Игровое Варенье №4</span></b> - это омский хакатон по разработке ИГР.<br />
+              Собираемся 2 августа в 10:00 в Точке Кипения на Маршала Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
             </p>
             <p>
-              Стартуем одновременно с <a target='_blank' href="https://ldjam.com/">мировым Ludum Dare 57</a><br />
+              Стартуем одновременно с <a target='_blank' href="https://itch.io/jam/gmtk-2025">GMTK 2025</a><br />
             </p>
             <p>
-              Можно участвовать в соло или в команде из 2..10 человек.
+              Можно участвовать в соло или в команде из 2..5 человек.
             </p>
           </div>
         </section>
@@ -48,9 +49,9 @@ export function App() {
             openInfo && (
               <div className='ras'>
                 <div style={{ gridArea: '1 / 1 / 2 / 2' }} className='d-box'>
-                  <h4>Суббота 5 апреля:</h4>
+                  <h4>Суббота 2 августа:</h4>
                   <ul>
-                    <li>Анонс темы хакатона в 9:00 в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
+                    <li>Анонс темы хакатона ЗА НЕСКОЛЬКО ДНЕЙ ДО НАЧАЛА в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
                     <li>Открытие офиса в 10:00</li>
                     <li>В 12:00 обсуждение идей игр</li>
                     <li>Делаем игры</li>
@@ -97,8 +98,12 @@ export function App() {
           }
         </section>
 
-        {window.location.pathname.includes('/teams') ?
+        {
+          window.location.pathname.includes('/teams') ?
           <Teams />
+          :
+          window.location.pathname.includes('/privacy') ? 
+          <Privacy></Privacy> 
           :
           <Register />
         }
