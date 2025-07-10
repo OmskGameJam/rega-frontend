@@ -34,6 +34,7 @@ export class Sender {
       return
     }
 
+    console.log(JSON.stringify(regaFormState));
     this.regaSending = true;
     try {
       const res = await globalAxios.post('/rega', JSON.stringify(regaFormState))

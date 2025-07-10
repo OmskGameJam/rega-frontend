@@ -11,6 +11,8 @@ class RegaFormValidityState {
   prepare: boolean = true
   tech: boolean = true
   joined: boolean = true
+  public: boolean = true
+  hideteam: boolean = true
 
   set(key: RegaFormKey, value: boolean) {
     this[key] = value

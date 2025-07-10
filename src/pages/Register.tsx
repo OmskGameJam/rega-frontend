@@ -1,6 +1,7 @@
 import { ButtonRegister } from "../components/ButtonRegister";
 import { RadioGroup } from "../components/RadioGroup";
 import { TextInputGroup } from "../components/TextInputGroup";
+import { CheckboxGroup } from "../components/CheckboxGroup";
 
 export function Register() {
   return <>
@@ -73,7 +74,19 @@ export function Register() {
         { long: 'Да', short: 'Да' }
       ]}
     />
+    <CheckboxGroup
+      name='public'
+      title=<>Приватность команды</>
+      subtitle=<>Нужные легальные штуки</>
+      options={[
+        { short: 'public', long: 'Показывать мою команду в списке участников'},
+        { short: 'hideteam', long: 'Скрывать участников команды'}
+      ]}
+    />
+
+    
     <center>
+      Отправляя форму вы соглашаетесь с <a href="/privacy" target="_blank">политикой конфиденциальности</a><br/>
       <ButtonRegister />
     </center>
   </section>
