@@ -21,7 +21,7 @@ export class Sender {
       const value = regaFormState[key]
       if (typeof value == 'string')  {
         regaFormState.set(key, value.trim()) // Авто trim
-        if (regaFormState[key].length < 1) {
+        if (value.length < 1) {
           regaFormValidityState.set(key, false)
           if (!firstInvalidInputName) firstInvalidInputName = key
           willSend = false;

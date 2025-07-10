@@ -17,7 +17,8 @@ interface CheckboxGroupOptions {
 function BaseCheckboxGroup(props: CheckboxGroupOptions) {
   
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    regaFormState.set(e.target.name, !regaFormState[e.target.name])
+    // @ts-ignore wacky html crap
+    regaFormState.set(e.target.name as RegaFormKey, !regaFormState[e.target.name as RegaFormKey])
     regaFormValidityState.set(props.name, true)
   }
 
@@ -29,7 +30,7 @@ function BaseCheckboxGroup(props: CheckboxGroupOptions) {
       <div className="radio-options">
         { props.options.map( (option, idx) => {
           return <label>
-            <input checked={regaFormState[option.short]} key={idx} onChange={onChange} type="checkbox" name={option.short} value={option.short} />
+            <input checked={!!regaFormState[option.short as RegaFormKey]} key={idx} onChange={onChange} type="checkbox" name={option.short} value={option.short} />
             <div> { option.long } </div>
           </label>
         }) }

@@ -16,6 +16,7 @@ class RegaFormState {
   hideteam: boolean = false
 
   set(key: RegaFormKey, value: string) {
+    // @ts-ignore this works
     this[key] = value
   }
 }
