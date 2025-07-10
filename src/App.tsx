@@ -59,7 +59,7 @@ export function App() {
                   </ul>
                 </div>
                 <div style={{ gridArea: '1 / 2 / 2 / 3' }} className='d-box'>
-                  <h4>Воскресенье 6 апреля:</h4>
+                  <h4>Воскресенье 3 августа:</h4>
                   <ul>
                     <li>Открытие офиса в 10:00</li>
                     <li>Делаем игры</li>
