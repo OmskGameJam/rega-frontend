@@ -4,8 +4,8 @@ import { Register } from './pages/Register'
 import { Privacy } from './pages/Privacy'
 import { Map, Placemark, YMaps } from '@r3flector/react-yandex-maps'
 import { Teams } from './pages/Teams'
-// import Snowfall from 'react-snowfall'
-// import { genSnowflakes } from './crap/snowflakes'
+import Snowfall from 'react-snowfall'
+import { genSnowflakes } from './crap/snowflakes'
 
 export function App() {
 
@@ -13,27 +13,31 @@ export function App() {
   return (
     <>
       <main>
-        {/* <Snowfall snowflakeCount={70} style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/> */}
+        <Snowfall snowflakeCount={70} style={{ position: 'fixed'}} images={genSnowflakes()} radius={[16,24]}/>
         <section>
-          <center>
-            <img className='logo' src="jar.png" />
+          <center onClick={() => {window.location = '/'}}>
+            <img className='logo' src="old-long.png" />
+            <img className='logo-mobile' src="old-short.png" />
           </center>
         </section>
         <section>
 
           <h1 className='text-outline d-box'>
-            Омский Игровой Хакатон 2-3 августа!
+            Омский Игровой Хакатон 4-5 октября!
           </h1>
           <div className='d-box'>
             <p>
-              <b><span>Игровое Варенье №4</span></b> - это омский хакатон по разработке ИГР.<br />
-              Собираемся 2 августа в 10:00 в Точке Кипения на Маршала Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
+              <b><span>Омский Людум Даре</span></b> - это <span style={{fontFamily: 'cursive'}}>легендарный</span> омский хакатон по разработке ИГР.<br />
+              Собираемся 4 октября в 10:00 в Точке Кипения на Маршала Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
             </p>
             <p>
-              Стартуем одновременно с <a target='_blank' href="https://itch.io/jam/gmtk-2025">GMTK 2025</a><br />
+              Стартуем одновременно мировым с <a target='_blank' href="https://ldjam.com/">Ludum Dare 58</a><br />
             </p>
             <p>
               Можно участвовать в соло или в команде из 2..5 человек.
+            </p>
+            <p style={{fontSize: '0.6em'}}>
+              но хеллоуин же в конце месяца...
             </p>
           </div>
         </section>
@@ -49,21 +53,21 @@ export function App() {
             openInfo && (
               <div className='ras'>
                 <div style={{ gridArea: '1 / 1 / 2 / 2' }} className='d-box'>
-                  <h4>Суббота 2 августа:</h4>
+                  <h4>Суббота 4 октября:</h4>
                   <ul>
-                    <li>Анонс темы хакатона ЗА НЕСКОЛЬКО ДНЕЙ ДО НАЧАЛА в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
-                    <li>Открытие офиса в 10:00</li>
+                    <li>Анонс темы в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
+                    <li>Открытие точки в 10:00</li>
                     <li>В 12:00 обсуждение идей игр</li>
                     <li>Делаем игры</li>
                     <li>Уходим домой в 20:00</li>
                   </ul>
                 </div>
                 <div style={{ gridArea: '1 / 2 / 2 / 3' }} className='d-box'>
-                  <h4>Воскресенье 6 апреля:</h4>
+                  <h4>Воскресенье 5 октября:</h4>
                   <ul>
                     <li>Открытие офиса в 10:00</li>
                     <li>Делаем игры</li>
-                    <li>Ярмарка игр в 18:00 (Можно звать друзей)</li>
+                    <li>Ярмарка игр в 18:00 <b>(Можно звать друзей!)</b></li>
                     <li>Подведение итогов, награжения и СЮРПРИЗ</li>
                     <li>Афтепати в Биркиндоме в 21:00</li>
                   </ul>
@@ -89,7 +93,7 @@ export function App() {
                     <li>Геймплей - игра, в которую веселее или интереснее всего играть</li>
                     <li>Красота - игра с лучшим артом, лучшими шейдерами или попросту тесно сшитая</li>
                     <li>Звук - игра с лучшим звуковым оформлением, короче, Dolbit Normalno</li>
-                    <li><i>Ш</i>то это - никто не знает, что это, сюда попадают игры, которые <span>не такие, как все</span></li>
+                    <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <span style={{fontFamily: 'cursive'}}>не такие, как все</span></li>
                     <li>Вайбик - таинственная номинация от таинственного спонсора</li>
                   </ul>
                 </div>

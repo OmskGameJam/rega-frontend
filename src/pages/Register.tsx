@@ -85,7 +85,7 @@ export function Register() {
     />
 
     
-    <center>
+    <center style={{color: 'white'}}>
       Отправляя форму вы соглашаетесь с <a href="/privacy" target="_blank">политикой конфиденциальности</a><br/>
       <ButtonRegister />
     </center>
