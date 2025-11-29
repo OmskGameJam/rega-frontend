@@ -32,7 +32,7 @@ export function App() {
             </p>
             <p>
               Стартуем одновременно с <a target='_blank' href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ">
-                <StringCycler strings={['undefined', '[object Object]', 'ERROR', 'ReferenceError', 'NullPointerException', 'NaN', 'DivisionByZeroException', '[screaming externally]', 'VibeCheckNotPassedException', 'Abort, Retry, Ignore, Fail?', '?REDO FROM START', 'lp0 on fire', 'HCF' ]} />
+                <StringCycler strings={['undefined', '[object Object]', 'ERROR', 'ReferenceError', 'NullPointerException', 'NaN', 'DivisionByZeroException', '[screaming externally]', 'VibeCheckNotPassedException', 'Abort, Retry, Ignore, Fail?', '?REDO FROM START', 'lp0 on fire', 'Guru Meditation' ]} />
               </a>...?
               <br />
             </p>
@@ -58,8 +58,8 @@ export function App() {
                 <div style={{ gridArea: '1 / 1 / 2 / 2' }} className='d-box'>
                   <h4>Понедельник 5 января:</h4>
                   <ul>
-                    <li>Анонс темы хакатона ЗА НЕСКОЛЬКО ДНЕЙ ДО НАЧАЛА в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
-                    <li>Открытие точки в 10:00</li>
+                    <li>Анонс темы хакатона в чате <a href='https://t.me/omsky_gamedev' target='_blank'>https://t.me/omsky_gamedev</a></li>
+                    <li>Открытие в 10:00</li>
                     <li>В 12:00 обсуждение идей игр</li>
                     <li>Делаем игры</li>
                     <li>Уходим домой в 20:00</li>
@@ -68,7 +68,7 @@ export function App() {
                 <div style={{ gridArea: '1 / 2 / 2 / 3' }} className='d-box'>
                   <h4>Вторник 6 января:</h4>
                   <ul>
-                    <li>Открытие офиса в 10:00</li>
+                    <li>Открытие в 10:00</li>
                     <li>Делаем игры</li>
                     <li>Ярмарка игр в 18:00 <b>(Можно звать друзей!)</b></li>
                     <li>Подведение итогов, награжения и СЮРПРИЗ</li>
@@ -77,7 +77,7 @@ export function App() {
                 </div>
                 <div style={{ gridArea: '2 / 1 / 3 / 3' }} className='d-box'>
                   <div>
-                    <div>Место: <b>ИТ-парке Омск</b></div>
+                    <div>Место: <b>ИТ-парк Омск</b></div>
                     <div>Адрес: Омск, пр. Комарова, 21 к1</div>
                     <br /><br />
                   </div>
