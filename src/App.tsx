@@ -6,6 +6,7 @@ import { Map, Placemark, YMaps } from '@r3flector/react-yandex-maps'
 import { Teams } from './pages/Teams'
 import Snowfall from 'react-snowfall'
 import { genSnowflakes } from './crap/snowflakes'
+import StringCycler from './components/StringCycler'
 
 export function App() {
 
@@ -30,7 +31,13 @@ export function App() {
               Собираемся 5 января в 10:00 в ИТ-парке на Комарова 21 к1 в городе Омске и пишем игру ДВА ДНЯ.
             </p>
             <p>
-              Стартуем одновременно с <a target='_blank' href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ">undefined</a><br />
+              Стартуем одновременно с <a target='_blank' href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ">
+                <StringCycler strings={['undefined', '[object Object]', 'ERROR', 'ReferenceError', 'NullPointerException', 'NaN', 'DivisionByZeroException', '[screaming externally]', 'VibeCheckNotPassedException', 'Abort, Retry, Ignore, Fail?', '?REDO FROM START', 'lp0 on fire', 'HCF' ]} />
+              </a>...?
+              <br />
+            </p>
+            <p>
+              В этот раз мы не синхронизируемся с каким-то мировым джемом! Тему подберём сами и анонсируем в день начала.
             </p>
             <p>
               Можно участвовать в соло или в команде из 2..5 человек.
