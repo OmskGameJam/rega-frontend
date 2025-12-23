@@ -86,7 +86,7 @@ export function App() {
                       center: [54.983200, 73.309408],
                       zoom: 17
                     }}>
-                      <Placemark geometry={[54.983200, 73.309408]} defaultProperties={{ iconCaption: 'Вход туташки!' }} />
+                      <Placemark geometry={[54.983346, 73.310165]} defaultProperties={{ iconCaption: 'Вход туташки!' }} />
                     </Map>
                   </YMaps>
                 </div>
