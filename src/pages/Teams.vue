@@ -21,14 +21,14 @@ const loading = ref(true)
 const teams = ref<ITeamData[]>([])
 const activeTeam = ref(0)
 
-ym(YM_COUNTER, 'reachGoal', 'view-teams')
-
 onMounted(() => {
+  ym(YM_COUNTER, 'reachGoal', 'view-teams')
+
   globalAxios.get('/rega')
     .then((d) => {
-      teams.value = JSON.parse(d.data)
+      teams.value = d.data
       loading.value = false
-      activeTeam.value = parseInt(window.localStorage.getItem('my-team') ?? '')
+      activeTeam.value = parseInt(window.localStorage.getItem('my-team') ?? '') || 0
     })
     .catch(() => {
       alert('Не удалось загрузить команды :(')

@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { Box, Button } from 'win-55-ui-vue'
-import { useRouter } from 'vue-router'
 import StringCycler from './components/StringCycler.vue'
-
-const router = useRouter()
 </script>
 
 <template>
@@ -11,11 +8,11 @@ const router = useRouter()
     <!-- TODO: Snowfall - нет аналога в win-55-ui-vue, нужна Vue-библиотека или своя реализация -->
 
     <section>
-      <center>
-        <a href="/">
+      <div class="section-center">
+        <router-link to="/">
           <img class="logo" src="/jar.png" />
-        </a>
-      </center>
+        </router-link>
+      </div>
     </section>
 
     <section>
@@ -49,11 +46,13 @@ const router = useRouter()
     </section>
 
     <section>
-      <center>
-        <Button @click="router.push('/register')">
-          Регистрация команды
-        </Button>
-      </center>
+      <div class="section-center">
+        <router-link v-slot="{ navigate }" to="/register" custom>
+          <Button @click="navigate">
+            Регистрация команды
+          </Button>
+        </router-link>
+      </div>
     </section>
 
     <section>

@@ -4,8 +4,6 @@ body {
   font-family: "Noto Sans Mono", monospace;
   font-optical-sizing: auto;
   font-style: normal;
-  /* font-variation-settings:
-    "wdth" 87.5; */
   background: url("/winter.png");
   background-size: cover;
   background-position: center;
@@ -29,14 +27,6 @@ p:not(:last-child) {
   margin: 0 0 10px 0;
 }
 
-.show-divs div {
-  border: 1px solid blue;
-}
-
-.show-ps p {
-  border: 1px solid red;
-}
-
 h1, h2, h3 {
   font-size: 40px;
   font-weight: bolder;
@@ -53,50 +43,17 @@ h3 {
 }
 
 section {
-  margin: 40px auto ;
+  margin: 40px auto;
 }
 
-.input-group {
+.section-center {
   display: flex;
-  flex-direction: column;
-  width: 80%;
-  margin: auto
-}
-
-.input-group-title {
-  font-size: 20px;
-}
-
-.input-group-subtitle {
-  font-size: 15px;
-  color: #ffffff82;
-  margin-bottom: 15px;
-}
-
-.input-group input[type="text"], .input-group textarea  {
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 15px;
-  width: 95%;
-}
-
-.d-box-black input[type="text"], .d-box-black textarea {
-  border: 4px solid #9da5ae;
-  /* border: 4px solid #bf0000; */
-  box-sizing: content-box;
-  /* background: #3f003f; */
-  background: #191898;
-  color: white;
+  justify-content: center;
 }
 
 .d-box-black a {
   color: yellow;
 }
-
-textarea {
-  height: 100px;
-}
-
 
 .ras {
   display: grid;
@@ -105,41 +62,8 @@ textarea {
   grid-row-gap: 0px;
 }
 
-.radio-options {
-  display: flex;
-  flex-direction: column;
-}
-
-.radio-options label {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
-.radio-options input {
-  margin: 0 10px 0 0;
-}
-
-button.d-box {
-  background: none;
-  font-size: large;
-  font-family: 'Noto Sans Mono';
-  color: yellow;
-}
-
-button.active {
-  color: black;
-}
-
 .d-box.active {
-  /* border-image-source: url("/border-highlight.png") */
   border-image-source: url("/border-highlight-blue.png")
-}
-
-::placeholder {
-  color: #ffffff82;
-  opacity: 1; /* Firefox */
-  overflow: none;
 }
 
 main {
@@ -153,14 +77,13 @@ main {
   border-image-outset: 0px 0px 0px 0px;
   border-image-repeat: stretch stretch;
   border-image-source: url("/border.png");
-  border-style: solid; 
+  border-style: solid;
   text-align: left;
   padding: 33px;
   background: none
 }
 
 .d-box-black {
-  /* border-image-source: url("/border-black.png"); */
   border-image-source: url("/border-blue.png");
   color: white;
 }
@@ -184,13 +107,6 @@ li:first-of-type {
 .text-outline {
   text-shadow: rgb(42, 42, 65) 2px 0px 0px, rgb(42, 42, 65) 1.75517px 0.958851px 0px, rgb(42, 42, 65) 1.0806px 1.68294px 0px, rgb(42, 42, 65) 0.141474px 1.99499px 0px, rgb(42, 42, 65) -0.832294px 1.81859px 0px, rgb(42, 42, 65) -1.60229px 1.19694px 0px, rgb(42, 42, 65) -1.97999px 0.28224px 0px, rgb(42, 42, 65) -1.87291px -0.701566px 0px, rgb(42, 42, 65) -1.30729px -1.51361px 0px, rgb(42, 42, 65) -0.421592px -1.95506px 0px, rgb(42, 42, 65) 0.567324px -1.91785px 0px, rgb(42, 42, 65) 1.41734px -1.41108px 0px, rgb(42, 42, 65) 1.92034px -0.558831px 0px;
   color: white
-}
-
-@media screen and (min-width: 1024) {
-  button.d-box-black:hover {
-    border-image-source: url("/border-active.png");
-    color: unset;
-  }
 }
 
 .team-masonry {
@@ -227,33 +143,18 @@ li:first-of-type {
     text-align: center !important;
   }
 
-  input[type="text"], textarea {
-    width: 90% !important
-  }
-
   .ras {
     display: flex;
     flex-direction: column;
   }
 }
 
-
-/* Mobile-first: hide regular logo, show mobile logo by default */
 .logo {
   display: none;
 }
 
-.logo-mobile {
-  display: block;
-}
-
-/* Non-mobile devices (typically 769px and above) */
 @media (min-width: 769px) {
   .logo {
     display: block;
-  }
-  
-  .logo-mobile {
-    display: none;
   }
 }
