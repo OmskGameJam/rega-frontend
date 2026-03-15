@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import vue from '@vitejs/plugin-vue'
+import { win55ui } from 'win-55-ui-vue/plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [vue(), win55ui()],
 })

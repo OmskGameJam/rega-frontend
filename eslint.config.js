@@ -1,28 +1,36 @@
 import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import pluginVue from 'eslint-plugin-vue'
 import tseslint from 'typescript-eslint'
+import globals from 'globals'
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+export default [
+  { ignores: ['dist/', 'asset-src/'] },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...pluginVue.configs['flat/recommended'],
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.vue'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      parserOptions: {
+        parser: tseslint.parser,
+      },
     },
   },
-)
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ym: 'readonly',
+      },
+    },
+    rules: {
+      'vue/multi-word-component-names': 'off',
+      'vue/html-self-closing': ['warn', {
+        html: { void: 'any', normal: 'always', component: 'always' },
+      }],
+      'vue/max-attributes-per-line': 'off',
+      'vue/first-attribute-linebreak': 'off',
+      'vue/html-closing-bracket-newline': 'off',
+    },
+  },
+]
