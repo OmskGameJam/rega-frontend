@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Box, Button } from 'win-55-ui-vue'
+import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
 import StringCycler from './components/StringCycler.vue'
 </script>
 
@@ -43,16 +44,6 @@ import StringCycler from './components/StringCycler.vue'
           Можно участвовать в соло или в команде из 2..5 человек.
         </p>
       </Box>
-    </section>
-
-    <section>
-      <div class="section-center">
-        <router-link v-slot="{ navigate }" to="/registration" custom>
-          <Button @click="navigate">
-            Регистрация команды
-          </Button>
-        </router-link>
-      </div>
     </section>
 
     <section>
@@ -105,6 +96,16 @@ import StringCycler from './components/StringCycler.vue'
             <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <span style="font-family: cursive">не такие, как все</span></li>
           </ul>
         </Box>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-center">
+        <router-link v-slot="{ navigate }" to="/registration" custom>
+          <Button @click="navigate">
+            Регистрация команды
+          </Button>
+        </router-link>
       </div>
     </section>
 

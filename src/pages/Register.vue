@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Box, Button, Titlebar, Typography, RadioButton, Checkbox, HDivider } from 'win-55-ui-vue'
+import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window } from 'win-55-ui-vue'
 import WizardInput from '../components/WizardInput.vue'
 import BaseTextarea from '../components/BaseTextarea.vue'
 import { globalAxios } from '../net/axios'
@@ -15,6 +15,14 @@ const currentStep = ref(0)
 const isSubmitting = ref(false)
 const submitError = ref('')
 const submitSuccess = ref(false)
+
+const windowX = ref(100)
+const windowY = ref(50)
+
+onMounted(() => {
+  windowX.value = Math.max(0, Math.round((window.innerWidth - 760) / 2))
+  windowY.value = Math.max(20, Math.round((window.innerHeight - 660) / 2))
+})
 
 const formData = ref({
   name: '',
@@ -136,9 +144,13 @@ function goToTeams() {
 <template>
   <div class="wizard-overlay" @click="handleWindowClick">
     <Typography font-color="black">
-      <Box type="panel-d-2" :extra-styles="{ width: '760px' }">
-        <Titlebar title="Регистрация на Игровой Джем" icon="/win-55-ui/icons/program.png" />
-
+      <Window
+        v-model:x="windowX"
+        v-model:y="windowY"
+        :width="760"
+        :height="660"
+        :extra-styles="{ overflow: 'hidden' }"
+      >
         <div class="wizard-body">
           <div class="wizard-sidebar">
             <img :src="sidebarImage" class="wizard-sidebar-icon" draggable="false" />
@@ -425,18 +437,16 @@ function goToTeams() {
             </Button>
           </template>
         </div>
-      </Box>
+      </Window>
     </Typography>
   </div>
 </template>
 
 <style scoped>
 .wizard-overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 16px;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
 }
 
 .wizard-body {
@@ -456,6 +466,21 @@ function goToTeams() {
 .wizard-sidebar-icon {
   opacity: 0.7;
   image-rendering: pixelated;
+}
+
+/* Переопределить заголовок окна (в Window он захардкожен как "Sample") */
+:deep(.titlebar-text span) {
+  font-size: 0 !important;
+  text-shadow: none !important;
+}
+
+:deep(.titlebar-text)::after {
+  content: "Регистрация на Игровой Джем";
+  font-family: "Bold12";
+  font-size: 24px;
+  color: white;
+  text-shadow: 2px 2px 0 black;
+  white-space: nowrap;
 }
 
 /* Скрыть кнопки «свернуть» и «развернуть» в тайтлбаре (оставить только X) */
