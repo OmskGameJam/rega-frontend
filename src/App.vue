@@ -105,7 +105,7 @@ import StringCycler from './components/StringCycler.vue'
               </YandexMap>
             </Box>
           </Window>
-          <Box type="panel-d-2" :extra-styles="{ gridArea: '3 / 1 / 3 / 3' }">
+          <Box type="notification" :extra-styles="{ gridArea: '3 / 1 / 3 / 3' }">
             В конце второго дня происходит Ярмарка Игр, на которой участники голосуют за игры друг друга в следующих номинациях:
             <ul>
               <li>Геймплей - игра, в которую веселее или интереснее всего играть</li>
