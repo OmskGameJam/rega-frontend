@@ -14,7 +14,7 @@ body {
   font-family: "Noto Sans Mono", monospace;
   font-optical-sizing: auto;
   font-style: normal;
-  background: url("/winter.png");
+  background: url("/summer.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -61,41 +61,17 @@ section {
   justify-content: center;
 }
 
-.d-box-black a {
-  color: yellow;
-}
-
 .ras {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
 }
 
-.d-box.active {
-  border-image-source: url("/border-highlight-blue.png")
-}
 
 main {
   max-width: 1024px;
   margin: auto;
-}
-
-.d-box {
-  border-image-slice: 27 27 27 27 fill;
-  border-image-width: 20px 20px 20px 20px;
-  border-image-outset: 0px 0px 0px 0px;
-  border-image-repeat: stretch stretch;
-  border-image-source: url("/border.png");
-  border-style: solid;
-  text-align: left;
-  padding: 33px;
-  background: none
-}
-
-.d-box-black {
-  border-image-source: url("/border-blue.png");
-  color: white;
 }
 
 ul {
@@ -141,14 +117,6 @@ li:first-of-type {
     margin: auto;
   }
 
-  .d-box {
-    max-width: 90vw;
-  }
-
-  .d-box p {
-    margin-bottom: 30px;
-  }
-
   h1 {
     text-align: center !important;
   }
@@ -156,6 +124,10 @@ li:first-of-type {
   .ras {
     display: flex;
     flex-direction: column;
+  }
+
+  main {
+    margin: 16px
   }
 }
 
@@ -167,4 +139,31 @@ li:first-of-type {
   .logo {
     display: block;
   }
+}
+
+
+
+/* Reset all unordered lists globally */
+ul {
+  list-style-type: none;  /* Remove default bullets */
+  margin: 24px 0;
+  padding-left: 24px;      /* Space for the en dash */
+}
+
+/* Apply en dash to all list items in any unordered list */
+ul > li {
+  position: relative;
+}
+
+ul > li::before {
+  content: "–";           /* En dash character */
+  position: absolute;
+  left: -24px;           /* Position the dash */
+  color: inherit;         /* Match the text color */
+}
+
+/* Maintain indentation for nested lists */
+ul ul {
+  margin: 8px 0;
+  padding-left: 24px;
 }

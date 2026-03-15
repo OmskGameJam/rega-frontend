@@ -14,7 +14,7 @@
     "axios": "^1.7.7",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0",
-    "vue-yandex-maps": "^2.1.0",
+    "vue-yandex-maps": "^2.3.2",
     "win-55-ui-vue": "github:OmskGameJam/win-55-ui#vue-migration"
   },
   "devDependencies": {
