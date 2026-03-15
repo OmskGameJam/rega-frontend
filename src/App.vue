@@ -47,7 +47,7 @@ import StringCycler from './components/StringCycler.vue'
 
     <section>
       <div class="section-center">
-        <router-link v-slot="{ navigate }" to="/register" custom>
+        <router-link v-slot="{ navigate }" to="/registration" custom>
           <Button @click="navigate">
             Регистрация команды
           </Button>

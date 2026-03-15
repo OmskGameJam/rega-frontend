@@ -1,16 +1,552 @@
 <script setup lang="ts">
-import { Box } from 'win-55-ui-vue'
-// TODO: Форма регистрации будет полностью переделана.
-// Это заглушка.
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { Box, Button, Titlebar, Typography, RadioButton, Checkbox, HDivider } from 'win-55-ui-vue'
+import WizardInput from '../components/WizardInput.vue'
+import BaseTextarea from '../components/BaseTextarea.vue'
+import { globalAxios } from '../net/axios'
+import { YM_COUNTER } from '../helpers/constants'
+
+const router = useRouter()
+
+const TOTAL_STEPS = 10
+
+const currentStep = ref(0)
+const isSubmitting = ref(false)
+const submitError = ref('')
+const submitSuccess = ref(false)
+
+const formData = ref({
+  name: '',
+  exp: '',
+  contact: '',
+  members: '',
+  where: '',
+  tech: '',
+  prepare: '',
+  advice: '',
+  joined: false,
+  public: true,
+  hideteam: false,
+})
+
+const canGoNext = computed(() => {
+  switch (currentStep.value) {
+    case 0: return true
+    case 1: return formData.value.name.trim() !== ''
+    case 2: return formData.value.exp.trim() !== ''
+    case 3: return formData.value.contact.trim() !== ''
+    case 4: return formData.value.members.trim() !== ''
+    case 5: return formData.value.where !== ''
+    case 6: return formData.value.tech.trim() !== ''
+    case 7: return formData.value.prepare.trim() !== ''
+    case 8: return formData.value.advice.trim() !== ''
+    case 9: return formData.value.joined
+    default: return true
+  }
+})
+
+function goNext() {
+  if (currentStep.value < TOTAL_STEPS && canGoNext.value) {
+    currentStep.value++
+  }
+}
+
+function goBack() {
+  if (currentStep.value > 0) {
+    currentStep.value--
+  }
+}
+
+function goHome() {
+  router.push('/')
+}
+
+function handleWindowClick(e: MouseEvent) {
+  const target = e.target as HTMLElement
+  if (target instanceof HTMLImageElement && target.src.includes('window/x.png')) {
+    goHome()
+  }
+}
+
+const SIDEBAR_IMAGES: Record<number, string> = {
+  0: '/win-55-ui/icons/program.png',
+  1: '/win-55-ui/icons/folder.png',
+  2: '/win-55-ui/icons/program.png',
+  3: '/win-55-ui/icons/program.png',
+  4: '/win-55-ui/icons/folder.png',
+  5: '/win-55-ui/icons/program.png',
+  6: '/win-55-ui/icons/program.png',
+  7: '/win-55-ui/icons/program.png',
+  8: '/win-55-ui/icons/program.png',
+  9: '/win-55-ui/icons/program.png',
+  10: '/win-55-ui/icons/program.png',
+}
+
+const sidebarImage = computed(() => SIDEBAR_IMAGES[currentStep.value] ?? SIDEBAR_IMAGES[0])
+
+const summaryText = computed(() =>
+  `Команда: ${formData.value.name}\n` +
+  `Опыт: ${formData.value.exp}\n` +
+  `Контакты: ${formData.value.contact}\n` +
+  `О команде: ${formData.value.members}\n` +
+  `Где: ${formData.value.where}\n` +
+  `Движок: ${formData.value.tech}\n` +
+  `Подготовка: ${formData.value.prepare}\n` +
+  `Совет: ${formData.value.advice}\n` +
+  `Публичная команда: ${formData.value.public ? 'Да' : 'Нет'}\n` +
+  `Скрывать участников: ${formData.value.hideteam ? 'Да' : 'Нет'}`
+)
+
+async function submit() {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+  submitError.value = ''
+
+  try {
+    const res = await globalAxios.post('/rega', {
+      name: formData.value.name,
+      exp: formData.value.exp,
+      contact: formData.value.contact,
+      where: formData.value.where,
+      category: 'Jam',
+      members: formData.value.members,
+      advice: formData.value.advice,
+      prepare: formData.value.prepare,
+      tech: formData.value.tech,
+      public: formData.value.public,
+      hideteam: formData.value.hideteam,
+    })
+
+    ym(YM_COUNTER, 'reachGoal', 'rega')
+    window.localStorage.setItem('my-team', res.data.id)
+    submitSuccess.value = true
+  } catch (e) {
+    submitError.value = e instanceof Error ? e.message : 'Неизвестная ошибка'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+function goToTeams() {
+  router.push('/teams')
+}
 </script>
 
 <template>
-  <section>
-    <h2 class="text-outline">
-      Регистрация команды
-    </h2>
-    <Box type="panel-d-2" extra-class="d-box-black" :extra-styles="{ textAlign: 'center', padding: '40px', color: '#999' }">
-      TODO: Форма регистрации (будет другая)
-    </Box>
-  </section>
+  <div class="wizard-overlay" @click="handleWindowClick">
+    <Typography font-color="black">
+      <Box type="panel-d-2" :extra-styles="{ width: '760px' }">
+        <Titlebar title="Регистрация на Игровой Джем" icon="/win-55-ui/icons/program.png" />
+
+        <div class="wizard-body">
+          <div class="wizard-sidebar">
+            <img :src="sidebarImage" class="wizard-sidebar-icon" draggable="false" />
+          </div>
+
+          <div class="wizard-main">
+            <!-- Шаг 0: Приветствие -->
+            <template v-if="currentStep === 0">
+              <Typography shorthand="Bold12" font-color="black">
+                Добро пожаловать в мастер регистрации на Игровой Джем
+              </Typography>
+              <p class="wizard-text">
+                Этот мастер поможет вам зарегистрировать команду
+                для участия в Игровом Джеме.
+              </p>
+              <p class="wizard-text">
+                Вам предстоит ответить на несколько вопросов
+                о вашей команде, опыте и планах.
+              </p>
+              <p class="wizard-text">
+                Нажмите &laquo;Далее&raquo; для продолжения.
+              </p>
+            </template>
+
+            <!-- Шаг 1: Название команды -->
+            <template v-if="currentStep === 1">
+              <Typography shorthand="Bold12" font-color="black">
+                Название команды
+              </Typography>
+              <p class="wizard-hint">
+                Например, &laquo;Зайчики-попрыгайчики&raquo; или &laquo;Новая команда (1)&raquo;
+              </p>
+              <WizardInput
+                v-model="formData.name"
+                placeholder="Новая команда (2)"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 2: Опыт -->
+            <template v-if="currentStep === 2">
+              <Typography shorthand="Bold12" font-color="black">
+                Какой у вас опыт в написании игр?
+              </Typography>
+              <p class="wizard-hint">
+                Не важно, много его у вас или мало, нам просто интересно :)
+              </p>
+              <WizardInput
+                v-model="formData.exp"
+                placeholder="0-3 года"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 3: Контакты -->
+            <template v-if="currentStep === 3">
+              <Typography shorthand="Bold12" font-color="black">
+                Оставьте ваши контакты
+              </Typography>
+              <p class="wizard-hint">
+                ВКонтакте, Телеграм, Мой Мир Mail.RU, в какое окно кидать камень
+              </p>
+              <WizardInput
+                v-model="formData.contact"
+                placeholder="телеграм: @oleg_gaming"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 4: О команде -->
+            <template v-if="currentStep === 4">
+              <Typography shorthand="Bold12" font-color="black">
+                Расскажите о своей команде!
+              </Typography>
+              <p class="wizard-hint">
+                Кто вы, что вы делаете, всё что угодно
+              </p>
+              <BaseTextarea
+                v-model="formData.members"
+                placeholder="Мы - Новая Команда, с нами: Олег - разработчик, Олег (1) - дизайнер"
+                :max-length="400"
+                :rows="6"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+              />
+            </template>
+
+            <!-- Шаг 5: Где хакатонить -->
+            <template v-if="currentStep === 5">
+              <Typography shorthand="Bold12" font-color="black">
+                Где планируете хакатонить?
+              </Typography>
+              <p class="wizard-hint">
+                Можно откуда угодно, но с нами — веселее
+              </p>
+              <Box type="border-groove" :extra-styles="{ padding: '12px', marginTop: '12px' }">
+                <RadioButton
+                  v-model="formData.where"
+                  value="Из ИТ-парка"
+                  label="С нами, из ИТ-парка на Комарова 21 к1"
+                />
+                <RadioButton
+                  v-model="formData.where"
+                  value="Из дома"
+                  label="Из дома"
+                />
+                <RadioButton
+                  v-model="formData.where"
+                  value="И там, и там"
+                  label="Из дома, а потом приду в офис на ярмарку"
+                />
+              </Box>
+            </template>
+
+            <!-- Шаг 6: На чём делать игру -->
+            <template v-if="currentStep === 6">
+              <Typography shorthand="Bold12" font-color="black">
+                На чём планируете делать игру?
+              </Typography>
+              <p class="wizard-hint">
+                Unity? Godot? Свой движок, или что-то совсем серьёзное?
+              </p>
+              <WizardInput
+                v-model="formData.tech"
+                placeholder="Unreal Bomjine 2"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 7: Подготовка -->
+            <template v-if="currentStep === 7">
+              <Typography shorthand="Bold12" font-color="black">
+                Как будете готовиться?
+              </Typography>
+              <p class="wizard-hint">
+                Читать литературу? Разминаться? Спать?
+              </p>
+              <WizardInput
+                v-model="formData.prepare"
+                placeholder="Прочитаю мангу про бетон и лягу спать в 7 утра"
+                :max-length="128"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 8: Совет -->
+            <template v-if="currentStep === 8">
+              <Typography shorthand="Bold12" font-color="black">
+                Дайте совет остальным участникам
+              </Typography>
+              <p class="wizard-hint">
+                Пейте водичку и ложитесь спать вовремя!
+              </p>
+              <WizardInput
+                v-model="formData.advice"
+                placeholder="Да"
+                :max-length="128"
+                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                @enter="goNext"
+              />
+            </template>
+
+            <!-- Шаг 9: Чат + Приватность -->
+            <template v-if="currentStep === 9">
+              <Typography shorthand="Bold12" font-color="black">
+                Почти готово!
+              </Typography>
+              <p class="wizard-label">
+                Пожалуйста, подтвердите:
+              </p>
+              <div style="margin-top: 12px">
+                <Checkbox
+                  v-model="formData.joined"
+                  label="Я зашёл в чат @omsky_gamedev и прочитал о формате Игрового Джема"
+                />
+              </div>
+
+              <p class="wizard-label" style="margin-top: 30px">
+                Приватность команды:
+              </p>
+              <div style="margin-top: 12px">
+                <Checkbox
+                  :model-value="!formData.public"
+                  label="Не анонсировать регистрацию в чат и скрыть команду из списка участников"
+                  @update:model-value="formData.public = !$event"
+                />
+                <Checkbox
+                  v-model="formData.hideteam"
+                  label="Скрывать участников команды"
+                />
+              </div>
+
+              <p class="wizard-privacy-note">
+                Отправляя форму вы соглашаетесь с
+                <router-link to="/privacy" target="_blank">
+                  политикой конфиденциальности
+                </router-link>
+              </p>
+            </template>
+
+            <!-- Шаг 10: Завершение -->
+            <template v-if="currentStep === TOTAL_STEPS && !submitSuccess">
+              <Typography shorthand="Bold12" font-color="black">
+                Завершение регистрации
+              </Typography>
+              <p class="wizard-summary-note">
+                Проверьте данные и нажмите &laquo;Готово&raquo;:
+              </p>
+              <Box type="textarea" :extra-styles="{ width: '100%', marginTop: '12px', padding: '4px' }">
+                <textarea
+                  readonly
+                  :value="summaryText"
+                  class="wizard-summary-textarea"
+                  rows="8"
+                />
+              </Box>
+              <p v-if="submitError" class="wizard-error">
+                {{ submitError }}
+              </p>
+            </template>
+
+            <!-- После успешной регистрации -->
+            <template v-if="submitSuccess">
+              <Typography shorthand="Bold12" font-color="black">
+                Регистрация завершена!
+              </Typography>
+              <p class="wizard-text">
+                Ваша команда &laquo;{{ formData.name }}&raquo; успешно
+                зарегистрирована на Игровой Джем.
+              </p>
+              <p class="wizard-text" style="margin-top: 30px">
+                Нажмите &laquo;Готово&raquo; чтобы перейти к списку команд.
+              </p>
+            </template>
+          </div>
+        </div>
+
+        <HDivider />
+
+        <div class="wizard-footer">
+          <template v-if="submitSuccess">
+            <Button @click="goToTeams">
+              Готово
+            </Button>
+          </template>
+          <template v-else>
+            <span
+              :style="{
+                opacity: currentStep === 0 ? 0.5 : 1,
+                pointerEvents: currentStep === 0 ? 'none' : 'auto',
+              }"
+            >
+              <Button @click="goBack">&lt; Назад</Button>
+            </span>
+
+            <template v-if="currentStep < TOTAL_STEPS">
+              <span
+                :style="{
+                  opacity: canGoNext ? 1 : 0.5,
+                  pointerEvents: canGoNext ? 'auto' : 'none',
+                }"
+              >
+                <Button @click="goNext">Далее &gt;</Button>
+              </span>
+            </template>
+            <template v-else>
+              <span
+                :style="{
+                  opacity: isSubmitting ? 0.5 : 1,
+                  pointerEvents: isSubmitting ? 'none' : 'auto',
+                }"
+              >
+                <Button @click="submit">Готово</Button>
+              </span>
+            </template>
+
+            <div style="width: 24px" />
+            <Button @click="goHome">
+              Отмена
+            </Button>
+          </template>
+        </div>
+      </Box>
+    </Typography>
+  </div>
 </template>
+
+<style scoped>
+.wizard-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.wizard-body {
+  display: flex;
+  min-height: 510px;
+}
+
+.wizard-sidebar {
+  width: 246px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #5555ff 0%, #0000aa 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-sidebar-icon {
+  opacity: 0.7;
+  image-rendering: pixelated;
+}
+
+/* Скрыть кнопки «свернуть» и «развернуть» в тайтлбаре (оставить только X) */
+:deep(.titlebar-content > :nth-child(3)),
+:deep(.titlebar-content > :nth-child(4)),
+:deep(.titlebar-content > :nth-child(5)) {
+  display: none;
+}
+
+:deep(textarea)::-webkit-scrollbar {
+  width: 32px;
+}
+
+:deep(textarea)::-webkit-scrollbar-track {
+  background: #c0c0c0;
+}
+
+:deep(textarea)::-webkit-scrollbar-thumb {
+  background: #dfdfdf;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+}
+
+:deep(textarea)::-webkit-scrollbar-button:single-button {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #ffffff #808080 #808080 #ffffff;
+  height: 32px;
+}
+
+.wizard-main {
+  flex: 1;
+  padding: 24px 30px;
+}
+
+.wizard-text {
+  margin-top: 24px;
+  line-height: 1.4;
+}
+
+.wizard-label {
+  margin-top: 18px;
+}
+
+.wizard-hint {
+  margin-top: 12px;
+  opacity: 0.6;
+  line-height: 1.3;
+}
+
+.wizard-error {
+  margin-top: 18px;
+  color: red;
+}
+
+.wizard-privacy-note {
+  margin-top: 30px;
+  opacity: 0.6;
+  line-height: 1.3;
+}
+
+.wizard-privacy-note a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.wizard-summary-note {
+  margin-top: 12px;
+  opacity: 0.6;
+}
+
+.wizard-summary-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+  font-family: 'Regular12', Arial, sans-serif;
+  font-size: 24px;
+  color: black;
+  line-height: 1.4;
+}
+
+.wizard-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 18px;
+}
+</style>

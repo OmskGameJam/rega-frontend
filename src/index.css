@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
 
+@font-face {
+  font-family: "Regular12";
+  src: url("/win-55-ui/font/LiberationSans-Regular-12.ttf");
+}
+
+@font-face {
+  font-family: "Bold12";
+  src: url("/win-55-ui/font/LiberationSans-Bold-12.ttf");
+}
+
 body {
   font-family: "Noto Sans Mono", monospace;
   font-optical-sizing: auto;
