@@ -149,6 +149,7 @@ function goToTeams() {
         v-model:y="windowY"
         :width="760"
         :height="660"
+        title=""
         :extra-styles="{ overflow: 'hidden' }"
       >
         <div class="wizard-body">
