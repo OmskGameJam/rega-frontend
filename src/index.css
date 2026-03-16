@@ -162,9 +162,6 @@ li:first-of-type {
   transform: translate(-50%, -50%);
 }
 
-.logo-container {
-  width: 500px
-}
 
 @media (min-width: 769px) {
   .logo {
@@ -174,9 +171,9 @@ li:first-of-type {
   .logo-mobile {
     display: none;
   }
-
+  
   .logo-container {
-    width: 720px
+    width: 770px
   }
 }
 
