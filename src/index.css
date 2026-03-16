@@ -19,12 +19,12 @@ body {
   background-position: center;
   background-attachment: fixed;
   image-rendering: pixelated;
+  overflow-y: scroll;
 }
 
 #root {
   margin-top: -40px;
   padding-top: 40px;
-  background-color: rgba(0,0,0,0.1);
   margin-bottom: -40px;
   padding-bottom: 40px;
 }
@@ -95,9 +95,13 @@ li:first-of-type {
   color: white
 }
 
+.team-masonry-wrap {
+  margin: auto
+}
+
 .team-masonry {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
 }
 
 .team-masonry > div {
@@ -105,17 +109,28 @@ li:first-of-type {
   overflow: auto;
 }
 
-@media screen and (max-width: 1024px) {
-
+@media screen and (max-width: 1103px) {
   .team-masonry {
+    gap: 32px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
   }
+}
 
-  .logo {
-    width: 90vw;
+@media screen and (min-width: 1103px) {
+  .team-masonry {
+    display: grid;
     margin: auto;
+    gap: 32px;
+    position: absolute;
+    width: 90vw;
+    left: 50vw;
+    transform: translateX(-50%);
   }
+}
+
+@media screen and (max-width: 1024px) {
 
   h1 {
     text-align: center !important;
@@ -133,11 +148,35 @@ li:first-of-type {
 
 .logo {
   display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo-mobile {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo-container {
+  width: 500px
 }
 
 @media (min-width: 769px) {
   .logo {
     display: block;
+  }
+
+  .logo-mobile {
+    display: none;
+  }
+
+  .logo-container {
+    width: 720px
   }
 }
 
