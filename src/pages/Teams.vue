@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { Box, Typography, Window } from 'win-55-ui-vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
+import IntGrid from '../components/IntGrid.vue'
 
 interface ITeamData {
   id: number
@@ -45,79 +46,82 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="team-masonry-wrap">
-    <Box v-if="loading" type="panel-d-2" extra-class="d-box-black">
-      Загружаем команды...
-    </Box>
+  <Box v-if="loading" type="panel-d-2" extra-class="d-box-black">
+    Загружаем команды...
+  </Box>
 
-    <div v-else class="team-masonry">
-      <Window
-        v-for="(t, idx) in teams"
-        :key="t.id"
-        faux
-        class="team-window"
-        :class="{ 'animate-in': animate }"
-        :style="{
-          animationDuration: N + 'ms',
-          animationDelay: (idx * M) + 'ms'
-        }"
-        :type="(activeTeam === t.id ? 'notification' : 'panel-d-2')"
-        :title="`№ ${idx + 1} ${t.name}`"
-      >
-        <div style="padding: 6px">
-          <div>
-            <Typography shorthand="Bold12">
-              Название:
-            </Typography> {{ t.name }}
-          </div>
-          <br />
-          <div>
-            <Typography shorthand="Bold12">
-              Опыт:
-            </Typography> {{ t.exp }}
-          </div>
-          <div>
-            <Typography shorthand="Bold12">
-              Класс:
-            </Typography> {{ t.tech }}
-          </div>
-          <div>
-            <Typography shorthand="Bold12">
-              Контакты:
-            </Typography> {{ t.contact }}
-          </div>
-          <div>
-            <Typography shorthand="Bold12">
-              Где хакатонит:
-            </Typography> {{ t.where }}
-          </div>
-          <br />
-          <div>
-            <Typography shorthand="Bold12">
-              Участники:
-            </Typography> {{ t.members }}
-          </div>
-          <br />
-          <div>
-            <Typography shorthand="Bold12">
-              Как готовится:
-            </Typography> {{ t.prepare }}
-          </div>
-          <div>
-            <Typography shorthand="Bold12">
-              Полезный совет:
-            </Typography> {{ t.advice }}
-          </div>
+  <IntGrid v-else
+           mode="columns"
+           :columns="3"
+           :element-width="512"
+           align="center"
+  >
+    <Window
+      v-for="(t, idx) in teams"
+      :key="t.id"
+      faux
+      class="team-window"
+      :class="{ 'animate-in': animate }"
+      :style="{
+        animationDuration: N + 'ms',
+        animationDelay: (idx * M) + 'ms'
+      }"
+      :type="(activeTeam === t.id ? 'notification' : 'panel-d-2')"
+      :title="`№ ${idx + 1} ${t.name}`"
+    >
+      <div style="padding: 6px">
+        <div>
+          <Typography shorthand="Bold12">
+            Название:
+          </Typography> {{ t.name }}
         </div>
-      </Window>
-    </div>
-  </div>
+        <br />
+        <div>
+          <Typography shorthand="Bold12">
+            Опыт:
+          </Typography> {{ t.exp }}
+        </div>
+        <div>
+          <Typography shorthand="Bold12">
+            Класс:
+          </Typography> {{ t.tech }}
+        </div>
+        <div>
+          <Typography shorthand="Bold12">
+            Контакты:
+          </Typography> {{ t.contact }}
+        </div>
+        <div>
+          <Typography shorthand="Bold12">
+            Где хакатонит:
+          </Typography> {{ t.where }}
+        </div>
+        <br />
+        <div>
+          <Typography shorthand="Bold12">
+            Участники:
+          </Typography> {{ t.members }}
+        </div>
+        <br />
+        <div>
+          <Typography shorthand="Bold12">
+            Как готовится:
+          </Typography> {{ t.prepare }}
+        </div>
+        <div>
+          <Typography shorthand="Bold12">
+            Полезный совет:
+          </Typography> {{ t.advice }}
+        </div>
+      </div>
+    </Window>
+  </IntGrid>
 </template>
 
 <style scoped>
 .team-window {
   opacity: 0;
-  transform: translateY(-80px);
+  transform: translateY(0px);
 }
 
 .animate-in {
@@ -129,12 +133,11 @@ onMounted(() => {
 @keyframes flyIn {
   from {
     opacity: 0;
-    transform: translateY(-480px)
+    transform: down, translateY(-480px)
   }
 
   to {
     opacity: 1;
-    transform: translateY(0)
   }
 }
 </style>

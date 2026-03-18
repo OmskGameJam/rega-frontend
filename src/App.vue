@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Box, Typography, Window} from 'win-55-ui-vue'
+import IntGrid from './components/IntGrid.vue';
 
 </script>
 
