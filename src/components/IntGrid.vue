@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   marginGap: true,
   mode: "columns",
   columns: 3,
-  elementWidth: null
+  elementWidth: null,
 })
 
 const container = ref<HTMLElement>()
@@ -36,66 +36,83 @@ function collectChildren() {
 function layout() {
   if (!container.value) return
 
-  const width = Math.floor(container.value.clientWidth)
-  const gap = Math.floor(props.gap)
+  const width = container.value.clientWidth
+  const gap = props.gap
   const marginGap = props.marginGap ? gap : 0
 
   let itemWidth = 0
   let columns = 1
 
   // -------------------------
-  // AUTO COLUMN MODE
+  // COLUMN CALCULATION
   // -------------------------
 
   if (props.mode === "auto-column") {
-    itemWidth = Math.floor(props.elementWidth ?? 200)
+    itemWidth = props.elementWidth ?? 200
 
     columns = Math.max(
       1,
       Math.floor((width - marginGap * 2 + gap) / (itemWidth + gap))
     )
-  }
-
-  // -------------------------
-  // COLUMN MODE
-  // -------------------------
-
-  else {
+  } else {
     columns = Math.max(1, props.columns)
 
-    // enforced width
     if (props.elementWidth !== null) {
-      itemWidth = Math.floor(props.elementWidth)
-    } 
-    // calculated width
-    else {
+      itemWidth = props.elementWidth
+    } else {
       const totalGap = gap * (columns - 1) + marginGap * 2
-      itemWidth = Math.floor((width - totalGap) / columns)
+      itemWidth = (width - totalGap) / columns
     }
   }
 
-  const usedWidth = columns * itemWidth + (columns - 1) * gap
-  const freeSpace = width - usedWidth
+  // 🔒 Snap width once (important)
+  itemWidth = Math.floor(itemWidth)
 
   // -------------------------
-  // ALIGNMENT
+  // CONTENT WIDTH (NO MARGINS)
   // -------------------------
 
-  let offsetX = marginGap
+  const contentWidth =
+    columns * itemWidth +
+    (columns - 1) * gap
 
-  if (props.align === "center") offsetX = Math.floor(freeSpace / 2)
-  if (props.align === "right") offsetX = Math.floor(freeSpace - marginGap)
+  // -------------------------
+  // ALIGNMENT (CORRECT MODEL)
+  // -------------------------
+
+  let offsetX = 0
+
+  if (props.align === "left") {
+    offsetX = marginGap
+  }
+
+  if (props.align === "center") {
+    offsetX = Math.floor((width - contentWidth) / 2)
+  }
+
+  if (props.align === "right") {
+    offsetX = Math.floor(width - contentWidth - marginGap)
+  }
+
+  // -------------------------
+  // PASS 1: APPLY WIDTHS
+  // -------------------------
+
+  children.value.forEach(child => {
+    child.style.position = "absolute"
+    child.style.width = itemWidth + "px"
+  })
+
+  // -------------------------
+  // PASS 2: POSITIONING
+  // -------------------------
 
   let x = offsetX
   let y = marginGap
   let rowHeight = 0
 
   children.value.forEach((child, i) => {
-    child.style.position = "absolute"
-    child.style.width = itemWidth + "px"
-
-    const rect = child.getBoundingClientRect()
-    const h = Math.floor(rect.height)
+    const h = Math.ceil(child.offsetHeight)
 
     child.style.left = Math.floor(x) + "px"
     child.style.top = Math.floor(y) + "px"
@@ -104,15 +121,15 @@ function layout() {
 
     if ((i + 1) % columns === 0) {
       x = offsetX
-      y = Math.floor(y + rowHeight + gap)
+      y += rowHeight + gap
       rowHeight = 0
     } else {
-      x = Math.floor(x + itemWidth + gap)
+      x += itemWidth + gap
     }
   })
 
-  const height = Math.floor(y + rowHeight + marginGap)
-  container.value.style.height = height + "px"
+  const height = y + rowHeight + marginGap
+  container.value.style.height = Math.ceil(height) + "px"
 }
 
 function relayout() {
@@ -130,25 +147,37 @@ onMounted(() => {
 
   resizeObserver = new ResizeObserver(relayout)
   mutationObserver = new MutationObserver(relayout)
+
   if (!container.value) return
-  
+
   resizeObserver.observe(container.value)
   mutationObserver.observe(container.value, {
     childList: true,
     subtree: false
   })
+
+  window.addEventListener("resize", relayout)
   relayout()
 })
 
 onBeforeUnmount(() => {
   resizeObserver?.disconnect()
+  mutationObserver?.disconnect()
+  window.removeEventListener("resize", relayout)
 })
 
 watch(() => ({ ...props }), relayout)
 </script>
 
 <template>
-  <div ref="container" style="position: relative; width: 100%;">
+  <div
+    ref="container"
+    style="
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    "
+  >
     <slot />
   </div>
 </template>

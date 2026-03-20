@@ -51,8 +51,7 @@ onMounted(() => {
   </Box>
 
   <IntGrid v-else
-           mode="columns"
-           :columns="3"
+           mode="auto-column"
            :element-width="512"
            align="center"
   >

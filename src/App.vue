@@ -1,20 +1,30 @@
 <script setup lang="ts">
 import { Box, Typography, Window} from 'win-55-ui-vue'
-import IntGrid from './components/IntGrid.vue';
-
+import { useResponsiveBreakpoint } from './composable/useResponsiveBreakpoint';
+const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 </script>
 
 <template>
-  <Window faux title="Welcome!" style="width: fit-content; margin: 32px auto">
-    <Box type="indent-dark" extra-class="logo-container">
-      <router-link to="/">
-        <img class="logo" src="/old-long.png" />
-        <img class="logo-mobile" src="/old-short.png" />
-      </router-link>
-      <canvas style="width: 100%; height: 100%" />
-    </Box>
-  </Window>
+  <div>
+    <Window faux title="Welcome!" style="margin: 32px">
+      <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">
+        <router-link to="/">
+          <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
+        </router-link>
+        <canvas style="width: 100%; height: 512px" />
+      </Box>
+    </Window>
+  </div>
   <Typography>
     <router-view />
   </Typography>
 </template>
+
+<style scoped lang="css">
+  .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+  }
+</style>

@@ -3,14 +3,24 @@ import { Box, Button, NamedPanel, Typography, Window } from 'win-55-ui-vue'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
 import StringCycler from '../components/StringCycler.vue';
 import IntGrid from '../components/IntGrid.vue';
+import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
+import { computed } from 'vue';
+
+const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
+const shouldBeCompact = computed(() => {
+  return breakpoint.value <= 720
+})
 </script>
 
 <template>
-  <IntGrid mode="columns" :columns="1" :element-width="1200" align="center" :gap="32">
+  <IntGrid mode="columns" :columns="1" :element-width="breakpoint" align="center">
     <Window faux title="О программе">
-      <Typography shorthand="Regular24" tag="h1">
-        Омский Игровой Хакатон 5-6 января!
-      </Typography>
+      <IntGrid :gap="16" :columns="1" align="center" :element-width="breakpoint < 840 ? breakpoint - 64 : 840" style="text-align: center;">
+        <Typography shorthand="Regular24" element="h1">
+          Омский Игровой Хакатон 18&NoBreak;-&NoBreak;19&NoBreak; &NoBreak;апреля&NoBreak;!
+        </Typography>
+      </IntGrid>
+      {{ breakpoint+16 }}
       <Box type="textarea" :extra-styles="{padding: '24px'}">
         <p>
           <Typography shorthand="Bold12">
@@ -38,9 +48,9 @@ import IntGrid from '../components/IntGrid.vue';
         </p>
       </Box>
     </Window>
-    <IntGrid mode="columns" :columns="2" :margin-gap="false">
+    <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false">
       <Window title="Суббота, 18 апреля" faux>
-        <ul>
+        <ul style="margin: 16px;">
           <li>Анонс темы хакатона в чате <a href="https://t.me/omsky_gamedev" target="_blank">https://t.me/omsky_gamedev</a></li>
           <li>Открытие в 10:00</li>
           <li>В 12:00 обсуждение идей игр</li>
@@ -49,7 +59,7 @@ import IntGrid from '../components/IntGrid.vue';
         </ul>
       </Window>
       <Window title="Воскресенье, 19 апреля" faux>
-        <ul>
+        <ul style="margin: 16px;">
           <li>Открытие в 10:00</li>
           <li>Делаем игры</li>
           <li>
@@ -62,7 +72,6 @@ import IntGrid from '../components/IntGrid.vue';
         </ul>
       </Window>
     </IntGrid>
-    
     <Window faux title="Геолокация">
       <div style="display: flex; gap: 8px">
         <NamedPanel label="Место">
