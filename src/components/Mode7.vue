@@ -1,63 +1,61 @@
 <template>
+  <div class="mode7-container" :style="containerStyle">
+    <!-- DEBUG PANEL -->
+    <!-- SCENE -->
+    <div
+      v-for="layer in layers"
+      :key="layer.id"
+      class="layer"
+      :style="getLayerStyle(layer)"
+    />
+  </div>
+  <Window v-if="showDebug" title="debug" resizable-horizontally resizable-vertically resizable>
+    <template #titlebar-buttons>
+      <Button 
+        extra-class="titlebar-button" 
+        base-type="panel-d-2"
+        @click="showDebug = false"
+      >
+        <img draggable="false" src="/node_modules/win-55-ui-vue/public/win-55-ui/window/x.png" />
+      </Button>
+    </template>
+    <div style="width: calc(100% - 2px); height: calc(100% - 40px); overflow: scroll; box-sizing: border-box;">
+      <h3>Global</h3>
 
-    <div class="mode7-container" :style="containerStyle">
-      <!-- DEBUG PANEL -->
-      <!-- SCENE -->
-      <div
-        v-for="layer in layers"
-        :key="layer.id"
-        class="layer"
-        :style="getLayerStyle(layer)"
-      />
-    </div>
-    <Window v-if="showDebug" title="debug" resizable-horizontally resizable-vertically resizable>
-      <template #titlebar-buttons>
-        <Button 
-          extra-class="titlebar-button" 
-          base-type="panel-d-2"
-          @click="showDebug = false"
-        >
-          <img draggable="false" src="/node_modules/win-55-ui-vue/public/win-55-ui/window/x.png" />
-        </Button>
-      </template>
-      <div style="width: calc(100% - 2px); height: calc(100% - 40px); overflow: scroll; box-sizing: border-box;">
-        <h3>Global</h3>
+      <label>Perspective {{ settings.perspective }}</label>
+      <input v-model.number="settings.perspective" type="range" min="100" max="2000" />
 
-        <label>Perspective {{ settings.perspective }}</label>
-        <input v-model.number="settings.perspective" type="range" min="100" max="2000" />
+      <label>Camera RotateZ {{ settings.cameraRotateZ }}</label>
+      <input v-model.number="settings.cameraRotateZ" type="range" min="-180" max="180" />
 
-        <label>Camera RotateZ {{ settings.cameraRotateZ }}</label>
-        <input v-model.number="settings.cameraRotateZ" type="range" min="-180" max="180" />
+      <label>Global Scale {{ settings.scale }}</label>
+      <input v-model.number="settings.scale" type="range" min="0.1" max="3" step="0.1" />
 
-        <label>Global Scale {{ settings.scale }}</label>
-        <input v-model.number="settings.scale" type="range" min="0.1" max="3" step="0.1" />
+      <hr />
 
-        <hr />
+      <div v-for="layer in layers" :key="layer.id" class="layer-controls">
+        <h4>{{ layer.id }}</h4>
 
-        <div v-for="layer in layers" :key="layer.id" class="layer-controls">
-          <h4>{{ layer.id }}</h4>
+        <label>SpeedX {{ layer.speedX }}</label>
+        <input v-model.number="layer.speedX" type="range" min="-300" max="300" />
 
-          <label>SpeedX {{ layer.speedX }}</label>
-          <input v-model.number="layer.speedX" type="range" min="-300" max="300" />
+        <label>SpeedY {{ layer.speedY }}</label>
+        <input v-model.number="layer.speedY" type="range" min="-300" max="300" />
 
-          <label>SpeedY {{ layer.speedY }}</label>
-          <input v-model.number="layer.speedY" type="range" min="-300" max="300" />
+        <label>Z {{ layer.z }}</label>
+        <input v-model.number="layer.z" type="range" min="-2000" max="2000" />
 
-          <label>Z {{ layer.z }}</label>
-          <input v-model.number="layer.z" type="range" min="-2000" max="2000" />
+        <label>RotateX {{ layer.rotation }}</label>
+        <input v-model.number="layer.rotation" type="range" min="0" max="90" />
 
-          <label>RotateX {{ layer.rotation }}</label>
-          <input v-model.number="layer.rotation" type="range" min="0" max="90" />
+        <label>RotateZ {{ layer.rotateZ }}</label>
+        <input v-model.number="layer.rotateZ" type="range" min="-180" max="180" />
 
-          <label>RotateZ {{ layer.rotateZ }}</label>
-          <input v-model.number="layer.rotateZ" type="range" min="-180" max="180" />
-
-          <label>Scale {{ layer.scale }}</label>
-          <input v-model.number="layer.scale" type="range" min="0.1" max="3" step="0.1" />
-        </div>
+        <label>Scale {{ layer.scale }}</label>
+        <input v-model.number="layer.scale" type="range" min="0.1" max="3" step="0.1" />
       </div>
-    </Window>
-
+    </div>
+  </Window>
 </template>
 
 <script setup lang="ts">
