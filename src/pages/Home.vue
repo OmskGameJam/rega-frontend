@@ -5,6 +5,7 @@ import StringCycler from '../components/StringCycler.vue';
 import IntGrid from '../components/IntGrid.vue';
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
 import { computed } from 'vue';
+import WeirdText from '../components/WeirdText.vue';
 
 const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
 const shouldBeCompact = computed(() => {
@@ -30,10 +31,11 @@ const shouldBeCompact = computed(() => {
       <Box type="textarea" :extra-styles="{padding: '24px'}">
         <p>
           <Typography shorthand="Bold12">
-            Игровое Варенье №5
-          </Typography> - это омский хакатон по разработке ИГР.<br />
+            Омский Людум Даре
+          </Typography> - это <WeirdText text="ЛЕГЕНДАРНЫЙ" /> омский хакатон по разработке ИГР.<br />
           Собираемся 5 января в 10:00 в ИТ-парке на Комарова 21 к1 в городе Омске и пишем игру ДВА ДНЯ.
-        </p>
+        </p><br>
+        <br>
         <p>
           Стартуем одновременно с <a target="_blank" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ">
             <StringCycler :strings="[
@@ -112,7 +114,7 @@ const shouldBeCompact = computed(() => {
         <li>Геймплей - игра, в которую веселее или интереснее всего играть</li>
         <li>Красота - игра с лучшим артом, лучшими шейдерами или попросту тесно сшитая</li>
         <li>Звук - игра с лучшим звуковым оформлением, короче, Dolbit Normalno</li>
-        <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <span style="font-family: cursive">не такие, как все</span></li>
+        <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <WeirdText text="не такие, как все" canvas-wrapper-style="transform: translateY(-45%) translateX(-25%)" /></li>
       </ul>
     </Box>
     <IntGrid :element-width="300" align="center" mode="columns" :columns="1">
