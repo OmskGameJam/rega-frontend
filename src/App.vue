@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Box, Typography, Window} from 'win-55-ui-vue'
 import { useResponsiveBreakpoint } from './composable/useResponsiveBreakpoint';
+import Mode7 from './components/Mode7.vue';
 const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 </script>
 
 <template>
+  <Mode7 />
   <div>
     <Window faux title="Welcome!" style="margin: 32px">
       <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">

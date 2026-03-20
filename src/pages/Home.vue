@@ -14,13 +14,19 @@ const shouldBeCompact = computed(() => {
 
 <template>
   <IntGrid mode="columns" :columns="1" :element-width="breakpoint" align="center">
+    <IntGrid :element-width="300" align="center" mode="columns" :columns="1">
+      <router-link v-slot="{ navigate }" to="/registration" custom>
+        <Button @click="navigate">
+          Регистрация команды
+        </Button>
+      </router-link>
+    </IntGrid>
     <Window faux title="О программе">
       <IntGrid :gap="16" :columns="1" align="center" :element-width="breakpoint < 840 ? breakpoint - 64 : 840" style="text-align: center;">
         <Typography shorthand="Regular24" element="h1">
           Омский Игровой Хакатон 18&NoBreak;-&NoBreak;19&NoBreak; &NoBreak;апреля&NoBreak;!
         </Typography>
       </IntGrid>
-      {{ breakpoint+16 }}
       <Box type="textarea" :extra-styles="{padding: '24px'}">
         <p>
           <Typography shorthand="Bold12">
@@ -48,8 +54,8 @@ const shouldBeCompact = computed(() => {
         </p>
       </Box>
     </Window>
-    <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false">
-      <Window title="Суббота, 18 апреля" faux>
+    <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false" :use-offsets="!shouldBeCompact">
+      <Window data-offset-x="-32" data-offset-y="32" title="Суббота, 18 апреля" faux>
         <ul style="margin: 16px;">
           <li>Анонс темы хакатона в чате <a href="https://t.me/omsky_gamedev" target="_blank">https://t.me/omsky_gamedev</a></li>
           <li>Открытие в 10:00</li>
@@ -58,7 +64,7 @@ const shouldBeCompact = computed(() => {
           <li>Уходим домой в 20:00</li>
         </ul>
       </Window>
-      <Window title="Воскресенье, 19 апреля" faux>
+      <Window data-offset-x="32" title="Воскресенье, 19 апреля" faux>
         <ul style="margin: 16px;">
           <li>Открытие в 10:00</li>
           <li>Делаем игры</li>
@@ -109,10 +115,12 @@ const shouldBeCompact = computed(() => {
         <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <span style="font-family: cursive">не такие, как все</span></li>
       </ul>
     </Box>
-    <router-link v-slot="{ navigate }" to="/registration" custom>
-      <Button @click="navigate">
-        Регистрация команды
-      </Button>
-    </router-link>
+    <IntGrid :element-width="300" align="center" mode="columns" :columns="1">
+      <router-link v-slot="{ navigate }" to="/registration" custom>
+        <Button @click="navigate">
+          Регистрация команды
+        </Button>
+      </router-link>
+    </IntGrid>
   </IntGrid>
 </template>

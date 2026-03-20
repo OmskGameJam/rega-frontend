@@ -10,7 +10,8 @@ interface Props {
   marginGap?: boolean
   mode?: Mode
   columns?: number
-  elementWidth?: number | null
+  elementWidth?: number | null,
+  useOffsets?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   mode: "columns",
   columns: 3,
   elementWidth: null,
+  useOffsets: false
 })
 
 const container = ref<HTMLElement>()
@@ -31,6 +33,17 @@ let mutationObserver: MutationObserver | null = null
 function collectChildren() {
   if (!container.value) return
   children.value = Array.from(container.value.children) as HTMLElement[]
+}
+
+// 🆕 Read per-child offsets
+function getOffset(el: HTMLElement) {
+  const x = Number(el.dataset.offsetX ?? 0)
+  const y = Number(el.dataset.offsetY ?? 0)
+
+  return {
+    x: isNaN(x) ? 0 : x,
+    y: isNaN(y) ? 0 : y,
+  }
 }
 
 function layout() {
@@ -65,7 +78,7 @@ function layout() {
     }
   }
 
-  // 🔒 Snap width once (important)
+  // 🔒 Snap width once
   itemWidth = Math.floor(itemWidth)
 
   // -------------------------
@@ -77,7 +90,7 @@ function layout() {
     (columns - 1) * gap
 
   // -------------------------
-  // ALIGNMENT (CORRECT MODEL)
+  // ALIGNMENT
   // -------------------------
 
   let offsetX = 0
@@ -104,7 +117,7 @@ function layout() {
   })
 
   // -------------------------
-  // PASS 2: POSITIONING
+  // PASS 2: POSITIONING + OFFSETS
   // -------------------------
 
   let x = offsetX
@@ -114,8 +127,10 @@ function layout() {
   children.value.forEach((child, i) => {
     const h = Math.ceil(child.offsetHeight)
 
-    child.style.left = Math.floor(x) + "px"
-    child.style.top = Math.floor(y) + "px"
+    const offset = getOffset(child) // 🆕 get per-child offset
+
+    child.style.left = Math.floor(x + offset.x) + "px"
+    child.style.top = Math.floor(y + offset.y) + "px"
 
     rowHeight = Math.max(rowHeight, h)
 
