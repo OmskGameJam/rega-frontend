@@ -441,7 +441,7 @@ function goToTeams() {
         </div>
       </Window>
     </Typography>
-    <FileCopyWindow />
+    <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
   </div>
 </template>
 

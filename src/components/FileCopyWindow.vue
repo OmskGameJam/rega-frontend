@@ -2,6 +2,14 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Box, Typography } from 'win-55-ui-vue'
 
+const props = withDefaults(defineProps<{
+  currentStep: number
+  totalSteps: number
+}>(), {
+  currentStep: 0,
+  totalSteps: 10,
+})
+
 const FILE_PATHS = [
   'C:\\Windows\\System\\vgaoem.fon',
   'C:\\Windows\\System\\serife.fon',
@@ -20,58 +28,38 @@ const FILE_PATHS = [
   'C:\\Program Files\\GameJam\\uninstall.exe',
 ]
 
-const TOTAL_CHUNKS = 24
+const TOTAL_CHUNKS = 23
+const MAX_PATH_LENGTH = 34
 
-const currentFileIndex = ref(0)
-const progress = ref(0)
+const currentFileIndex = ref(Math.floor(Math.random() * FILE_PATHS.length))
+let fileTimer: ReturnType<typeof setTimeout> | null = null
 
+function scheduleNextFile() {
+  const delay = 300 + Math.random() * 9700
+  fileTimer = setTimeout(() => {
+    currentFileIndex.value = Math.floor(Math.random() * FILE_PATHS.length)
+    scheduleNextFile()
+  }, delay)
+}
+
+onMounted(() => {
+  scheduleNextFile()
+})
+
+onUnmounted(() => {
+  if (fileTimer !== null) {
+    clearTimeout(fileTimer)
+  }
+})
+
+const progress = computed(() => props.currentStep / props.totalSteps)
 const filledChunks = computed(() => Math.floor(progress.value * TOTAL_CHUNKS))
-
-const MAX_PATH_LENGTH = 32
 
 const displayPath = computed(() => {
   const path = FILE_PATHS[currentFileIndex.value]
   if (path.length <= MAX_PATH_LENGTH) return path
   const keep = Math.floor((MAX_PATH_LENGTH - 3) / 2)
   return path.slice(0, keep) + '...' + path.slice(-keep)
-})
-
-let animationId: number | null = null
-let startTime = 0
-let duration = 0
-
-function randomDuration() {
-  return 300 + Math.random() * 700
-}
-
-function startNextFile() {
-  currentFileIndex.value = (currentFileIndex.value + 1) % FILE_PATHS.length
-  progress.value = 0
-  duration = randomDuration()
-  startTime = performance.now()
-}
-
-function animate(now: number) {
-  const elapsed = now - startTime
-  progress.value = Math.min(1, elapsed / duration)
-
-  if (progress.value >= 1) {
-    startNextFile()
-  }
-
-  animationId = requestAnimationFrame(animate)
-}
-
-onMounted(() => {
-  duration = randomDuration()
-  startTime = performance.now()
-  animationId = requestAnimationFrame(animate)
-})
-
-onUnmounted(() => {
-  if (animationId !== null) {
-    cancelAnimationFrame(animationId)
-  }
 })
 </script>
 
