@@ -7,6 +7,7 @@ import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
 import { computed } from 'vue';
 import WeirdText from '../components/WeirdText.vue';
 import RegBtn from './RegBtn.vue';
+import CmdMiner from '../components/CmdMiner.vue';
 
 const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
 const shouldBeCompact = computed(() => {
@@ -14,6 +15,7 @@ const shouldBeCompact = computed(() => {
 })
 </script>
 <template>
+  <CmdMiner />
   <IntGrid mode="columns" :columns="1" :element-width="breakpoint" align="center">
     <RegBtn />
     <Window faux title="О программе">
