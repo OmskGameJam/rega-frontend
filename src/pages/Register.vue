@@ -143,6 +143,7 @@ function goToTeams() {
 </script>
 
 <template>
+  <div class="rega-bg" />
   <div class="wizard-overlay" @click="handleWindowClick">
     <Typography font-color="black">
       <Window
@@ -578,5 +579,33 @@ function goToTeams() {
   justify-content: flex-end;
   align-items: center;
   padding: 12px 18px;
+}
+
+.rega-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: url('/installer-bg.png');
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-size: 100% 100%; /* Width auto, height 100% - stretches vertically */
+  animation: fade 1.5s;
+}
+
+@media (max-width: 1499px) {
+  .rega-bg {
+    background-size: auto 100%;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
