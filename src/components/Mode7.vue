@@ -214,8 +214,8 @@ onMounted(() => {
 .layer {
   position: absolute;
 
-  width: 900%;
-  height: 900%;
+  width: 600%;
+  height: 600%;
 
   top: 50%;
   left: 50%;

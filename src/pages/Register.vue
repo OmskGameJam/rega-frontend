@@ -78,12 +78,12 @@ function handleWindowClick(e: MouseEvent) {
 }
 
 const SIDEBAR_IMAGES: Record<number, string> = {
-  0: '/win-55-ui/icons/program.png',
-  1: '/win-55-ui/icons/folder.png',
-  2: '/win-55-ui/icons/program.png',
-  3: '/win-55-ui/icons/program.png',
-  4: '/win-55-ui/icons/folder.png',
-  5: '/win-55-ui/icons/program.png',
+  0: '/1-welcome.png',
+  1: '/2-identity.png',
+  2: '/3-experience.png',
+  3: '/4-contact.png',
+  4: '/',
+  5: '/6-location.png',
   6: '/win-55-ui/icons/program.png',
   7: '/win-55-ui/icons/program.png',
   8: '/win-55-ui/icons/program.png',
@@ -465,8 +465,10 @@ function goToTeams() {
 }
 
 .wizard-sidebar-icon {
-  opacity: 0.7;
   image-rendering: pixelated;
+  border: 2px solid black;
+  position: relative;
+  left: 2px;
 }
 
 /* Переопределить заголовок окна (в Window он захардкожен как "Sample") */
