@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window } from 'win-55-ui-vue'
 import WizardInput from '../components/WizardInput.vue'
+import FileCopyWindow from '../components/FileCopyWindow.vue'
 import BaseTextarea from '../components/BaseTextarea.vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
@@ -440,6 +441,7 @@ function goToTeams() {
         </div>
       </Window>
     </Typography>
+    <FileCopyWindow />
   </div>
 </template>
 
