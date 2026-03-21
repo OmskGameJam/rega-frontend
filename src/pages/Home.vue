@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import { Box, Button, NamedPanel, Typography, Window } from 'win-55-ui-vue'
+import { Box, NamedPanel, Typography, Window } from 'win-55-ui-vue'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
 import StringCycler from '../components/StringCycler.vue';
 import IntGrid from '../components/IntGrid.vue';
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
 import { computed } from 'vue';
 import WeirdText from '../components/WeirdText.vue';
+import RegBtn from './RegBtn.vue';
 
 const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
 const shouldBeCompact = computed(() => {
   return breakpoint.value <= 720
 })
 </script>
-
 <template>
   <IntGrid mode="columns" :columns="1" :element-width="breakpoint" align="center">
-    <IntGrid :element-width="300" align="center" mode="columns" :columns="1">
-      <router-link v-slot="{ navigate }" to="/registration" custom>
-        <Button @click="navigate">
-          Регистрация команды
-        </Button>
-      </router-link>
-    </IntGrid>
+    <RegBtn />
     <Window faux title="О программе">
       <IntGrid :gap="16" :columns="1" align="center" :element-width="breakpoint < 840 ? breakpoint - 64 : 840" style="text-align: center;">
         <Typography shorthand="Regular24" element="h1">
@@ -117,12 +111,6 @@ const shouldBeCompact = computed(() => {
         <li><i>Ш</i>то это - никто не знает, что это; сюда попадают игры, которые <WeirdText text="не такие, как все" canvas-wrapper-style="transform: translateY(-45%) translateX(-25%)" /></li>
       </ul>
     </Box>
-    <IntGrid :element-width="300" align="center" mode="columns" :columns="1">
-      <router-link v-slot="{ navigate }" to="/registration" custom>
-        <Button @click="navigate">
-          Регистрация команды
-        </Button>
-      </router-link>
-    </IntGrid>
+    <RegBtn />
   </IntGrid>
 </template>
