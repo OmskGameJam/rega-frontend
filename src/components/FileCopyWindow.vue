@@ -226,7 +226,6 @@ const displayPath = computed(() => {
   position: fixed;
   right: 0;
   bottom: 0;
-  z-index: 50;
 }
 
 .progress-track {

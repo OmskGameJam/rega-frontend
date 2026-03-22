@@ -43,6 +43,13 @@ onMounted(() => {
       alert('Не удалось загрузить команды :(')
     })
 })
+
+function trimTeamName(n: string) {
+  if (n.length > 28) {
+    return n.trim().slice(0,28) + '...'
+  }
+  return n
+}
 </script>
 
 <template>
@@ -66,53 +73,55 @@ onMounted(() => {
         animationDelay: (idx * M) + 'ms'
       }"
       :type="(activeTeam === t.id ? 'notification' : 'panel-d-2')"
-      :title="`№ ${idx + 1} ${t.name}`"
+      :title="`№ ${idx + 1} ${trimTeamName(t.name)}`"
     >
-      <div style="padding: 6px">
-        <div>
-          <Typography shorthand="Bold12">
-            Название:
-          </Typography> {{ t.name }}
+      <Box type="textarea">
+        <div class="team-text" style="padding: 6px">
+          <div>
+            <Typography shorthand="Bold12">
+              Название:
+            </Typography> {{ t.name }}
+          </div>
+          <br />
+          <div>
+            <Typography shorthand="Bold12">
+              Опыт:
+            </Typography> {{ t.exp }}
+          </div>
+          <div>
+            <Typography shorthand="Bold12">
+              Класс:
+            </Typography> {{ t.tech }}
+          </div>
+          <div>
+            <Typography shorthand="Bold12">
+              Контакты:
+            </Typography> {{ t.contact }}
+          </div>
+          <div>
+            <Typography shorthand="Bold12">
+              Где хакатонит:
+            </Typography> {{ t.where }}
+          </div>
+          <br />
+          <div>
+            <Typography shorthand="Bold12">
+              Участники:
+            </Typography> {{ t.members }}
+          </div>
+          <br />
+          <div>
+            <Typography shorthand="Bold12">
+              Как готовится:
+            </Typography> {{ t.prepare }}
+          </div>
+          <div>
+            <Typography shorthand="Bold12">
+              Полезный совет:
+            </Typography> {{ t.advice }}
+          </div>
         </div>
-        <br />
-        <div>
-          <Typography shorthand="Bold12">
-            Опыт:
-          </Typography> {{ t.exp }}
-        </div>
-        <div>
-          <Typography shorthand="Bold12">
-            Класс:
-          </Typography> {{ t.tech }}
-        </div>
-        <div>
-          <Typography shorthand="Bold12">
-            Контакты:
-          </Typography> {{ t.contact }}
-        </div>
-        <div>
-          <Typography shorthand="Bold12">
-            Где хакатонит:
-          </Typography> {{ t.where }}
-        </div>
-        <br />
-        <div>
-          <Typography shorthand="Bold12">
-            Участники:
-          </Typography> {{ t.members }}
-        </div>
-        <br />
-        <div>
-          <Typography shorthand="Bold12">
-            Как готовится:
-          </Typography> {{ t.prepare }}
-        </div>
-        <div>
-          <Typography shorthand="Bold12">
-            Полезный совет:
-          </Typography> {{ t.advice }}
-        </div>
-      </div>
+      </Box>
     </Window>
   </IntGrid>
 </template>
@@ -127,6 +136,10 @@ onMounted(() => {
   animation-name: flyIn;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.team-window {
+  word-break: break-all;
 }
 
 @keyframes flyIn {

@@ -12,7 +12,7 @@ import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
 const router = useRouter()
 
 const { width: viewportWidth, height: viewportHeight } = useResponsiveBreakpoint(0, [640, 1000])
-const isMobile = computed(() => viewportWidth.value < 640)
+const isMobile = computed(() => viewportWidth.value < 760)
 
 const TOTAL_STEPS = 10
 
@@ -153,6 +153,7 @@ function goToTeams() {
   <div class="rega-bg" />
   <div class="wizard-overlay" @click="handleWindowClick">
     <Typography font-color="black">
+      <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
       <Window
         v-model:x="windowX"
         v-model:y="windowY"
@@ -461,7 +462,6 @@ function goToTeams() {
         </div>
       </Window>
     </Typography>
-    <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
   </div>
 </template>
 
@@ -637,7 +637,7 @@ function goToTeams() {
   align-items: center;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 760px) {
   .wizard-sidebar {
     display: none;
   }
