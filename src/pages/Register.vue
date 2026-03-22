@@ -7,8 +7,12 @@ import FileCopyWindow from '../components/FileCopyWindow.vue'
 import BaseTextarea from '../components/BaseTextarea.vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
+import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
 
 const router = useRouter()
+
+const { width: viewportWidth, height: viewportHeight } = useResponsiveBreakpoint(0, [640, 1000])
+const isMobile = computed(() => viewportWidth.value < 640)
 
 const TOTAL_STEPS = 10
 
@@ -19,6 +23,9 @@ const submitSuccess = ref(false)
 
 const windowX = ref(100)
 const windowY = ref(50)
+
+const windowWidth = computed(() => isMobile.value ? viewportWidth.value : 760)
+const windowHeight = computed(() => isMobile.value ? viewportHeight.value : 660)
 
 onMounted(() => {
   windowX.value = Math.max(0, Math.round((window.innerWidth - 760) / 2))
@@ -149,17 +156,21 @@ function goToTeams() {
       <Window
         v-model:x="windowX"
         v-model:y="windowY"
-        :width="760"
-        :height="660"
+        :width="windowWidth"
+        :height="windowHeight"
+        :faux="isMobile"
         title=""
-        :extra-styles="{ overflow: 'hidden' }"
+        :extra-styles="{ overflow: 'hidden', display: 'flex', flexDirection: 'column', ...(isMobile ? { left: '0px', top: '0px' } : {}) }"
       >
         <div class="wizard-body">
           <div class="wizard-sidebar">
-            <img :src="sidebarImage" class="wizard-sidebar-icon" draggable="false" />
+            <img :src="sidebarImage" class="wizard-sidebar-image" draggable="false" />
           </div>
 
           <div class="wizard-main">
+            <div v-if="isMobile" class="wizard-mobile-image-wrap">
+              <img :src="sidebarImage" class="wizard-mobile-image" draggable="false">
+            </div>
             <!-- Шаг 0: Приветствие -->
             <template v-if="currentStep === 0">
               <Typography shorthand="Bold12" font-color="black">
@@ -404,40 +415,48 @@ function goToTeams() {
             </Button>
           </template>
           <template v-else>
-            <span
-              :style="{
-                opacity: currentStep === 0 ? 0.5 : 1,
-                pointerEvents: currentStep === 0 ? 'none' : 'auto',
-              }"
-            >
-              <Button @click="goBack">&lt; Назад</Button>
-            </span>
-
-            <template v-if="currentStep < TOTAL_STEPS">
-              <span
-                :style="{
-                  opacity: canGoNext ? 1 : 0.5,
-                  pointerEvents: canGoNext ? 'auto' : 'none',
-                }"
-              >
-                <Button @click="goNext">Далее &gt;</Button>
-              </span>
-            </template>
-            <template v-else>
-              <span
-                :style="{
-                  opacity: isSubmitting ? 0.5 : 1,
-                  pointerEvents: isSubmitting ? 'none' : 'auto',
-                }"
-              >
-                <Button @click="submit">Готово</Button>
-              </span>
-            </template>
-
-            <div style="width: 24px" />
-            <Button @click="goHome">
+            <Button v-if="isMobile" @click="goHome">
               Отмена
             </Button>
+
+            <div class="wizard-footer-nav">
+              <span
+                :style="{
+                  opacity: currentStep === 0 ? 0.5 : 1,
+                  pointerEvents: currentStep === 0 ? 'none' : 'auto',
+                }"
+              >
+                <Button @click="goBack">&lt; Назад</Button>
+              </span>
+
+              <template v-if="currentStep < TOTAL_STEPS">
+                <span
+                  :style="{
+                    opacity: canGoNext ? 1 : 0.5,
+                    pointerEvents: canGoNext ? 'auto' : 'none',
+                  }"
+                >
+                  <Button @click="goNext">Далее &gt;</Button>
+                </span>
+              </template>
+              <template v-else>
+                <span
+                  :style="{
+                    opacity: isSubmitting ? 0.5 : 1,
+                    pointerEvents: isSubmitting ? 'none' : 'auto',
+                  }"
+                >
+                  <Button @click="submit">Готово</Button>
+                </span>
+              </template>
+
+              <template v-if="!isMobile">
+                <div style="width: 24px" />
+                <Button @click="goHome">
+                  Отмена
+                </Button>
+              </template>
+            </div>
           </template>
         </div>
       </Window>
@@ -467,7 +486,7 @@ function goToTeams() {
   justify-content: center;
 }
 
-.wizard-sidebar-icon {
+.wizard-sidebar-image {
   image-rendering: pixelated;
   border: 2px solid black;
   position: relative;
@@ -606,6 +625,59 @@ function goToTeams() {
   }
   100% {
     opacity: 1;
+  }
+}
+
+.wizard-mobile-image-wrap {
+  display: none;
+}
+
+.wizard-footer-nav {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 639px) {
+  .wizard-sidebar {
+    display: none;
+  }
+
+  .wizard-body {
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+  }
+
+  .wizard-main {
+    padding: 16px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .wizard-mobile-image-wrap {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .wizard-mobile-image {
+    /* Image is 246x510. Rotated 90deg → visually 510x246.
+       CSS height (original 510 side) becomes visual width after rotation.
+       Set it to fill container width. */
+    display: block;
+    image-rendering: pixelated;
+    border: 2px solid black;
+    transform: rotate(90deg);
+    height: calc(100vw - 32px);
+    width: auto;
+    /* Layout box stays 246xH unrotated. Excess vertical space = H*(1 - 246/510) = H*264/510.
+       Collapse it equally top/bottom with negative margins. */
+    margin: calc((100vw - 32px) * -132 / 510) auto;
+  }
+
+  .wizard-footer {
+    justify-content: space-between;
   }
 }
 </style>

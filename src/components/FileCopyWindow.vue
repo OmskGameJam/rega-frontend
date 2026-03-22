@@ -114,4 +114,10 @@ const displayPath = computed(() => {
   background: #000080;
   flex-shrink: 0;
 }
+
+@media (max-width: 639px) {
+  .file-copy-anchor :deep(.box) {
+    width: calc(100vw - 16px) !important;
+  }
+}
 </style>
