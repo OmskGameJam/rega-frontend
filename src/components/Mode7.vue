@@ -96,8 +96,8 @@ const layers = reactive<Layer[]>([
   {
     id: "ground",
     image: "/the-big-one.png",
-    width: 2400,
-    height: 1208,
+    width: 1200,
+    height: 604,
     offsetX: 0,
     offsetY: 0,
     speedX: 5,
@@ -211,6 +211,13 @@ onMounted(() => {
 
   overflow: hidden;
   transform-style: preserve-3d;
+}
+
+@media (max-width: 1000px) {
+  .mode7-container {
+    width: 1000px;
+    height: 1000px;
+  }
 }
 
 /* LAYERS */
