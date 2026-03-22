@@ -8,9 +8,9 @@ const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 </script>
 
 <template>
-  <Mode7 />
+  <Mode7 v-if="breakpoint > 720" />
   <div>
-    <Window v-if="$route.path !== '/registration'" faux title="Welcome!" style="margin: 32px">
+    <Window v-if="$route.path !== '/registration'" icon="/icons/pipes.png" faux title="Welcome!" style="margin: 32px">
       <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">
         <router-link to="/">
           <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />

@@ -18,7 +18,7 @@ const shouldBeCompact = computed(() => {
   <CmdMiner />
   <IntGrid mode="columns" :columns="1" :element-width="breakpoint" align="center">
     <RegBtn />
-    <Window faux title="О программе">
+    <Window icon="/icons/ogd.png" faux title="О программе">
       <IntGrid :gap="16" :columns="1" align="center" :element-width="breakpoint < 840 ? breakpoint - 64 : 840" style="text-align: center;">
         <Typography shorthand="Regular24" element="h1">
           Омский Игровой Хакатон 18&NoBreak;-&NoBreak;19&NoBreak; &NoBreak;апреля&NoBreak;!
@@ -53,7 +53,7 @@ const shouldBeCompact = computed(() => {
       </Box>
     </Window>
     <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false" :use-offsets="!shouldBeCompact">
-      <Window data-offset-x="-32" data-offset-y="32" title="Суббота, 18 апреля" faux>
+      <Window icon="/icons/calendar.png" data-offset-x="-32" data-offset-y="32" title="Суббота, 18 апреля" faux>
         <ul style="margin: 16px;">
           <li>Анонс темы хакатона в чате <a href="https://t.me/omsky_gamedev" target="_blank">https://t.me/omsky_gamedev</a></li>
           <li>Открытие в 10:00</li>
@@ -62,7 +62,7 @@ const shouldBeCompact = computed(() => {
           <li>Уходим домой в 20:00</li>
         </ul>
       </Window>
-      <Window data-offset-x="32" title="Воскресенье, 19 апреля" faux>
+      <Window icon="/icons/calendar.png" data-offset-x="32" title="Воскресенье, 19 апреля" faux>
         <ul style="margin: 16px;">
           <li>Открытие в 10:00</li>
           <li>Делаем игры</li>
@@ -76,7 +76,7 @@ const shouldBeCompact = computed(() => {
         </ul>
       </Window>
     </IntGrid>
-    <Window faux title="Геолокация">
+    <Window icon="/icons/planet.png" faux title="Геолокация">
       <div style="display: flex; gap: 8px">
         <NamedPanel label="Место">
           <Typography shorthand="Bold12">

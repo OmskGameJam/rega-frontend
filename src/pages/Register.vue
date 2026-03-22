@@ -160,7 +160,8 @@ function goToTeams() {
         :width="windowWidth"
         :height="windowHeight"
         :faux="isMobile"
-        title=""
+        icon="/icons/rega.png"
+        title="Регистрация"
         :extra-styles="{ overflow: 'hidden', display: 'flex', flexDirection: 'column', ...(isMobile ? { left: '0px', top: '0px' } : {}) }"
       >
         <div class="wizard-body">
@@ -491,49 +492,6 @@ function goToTeams() {
   border: 2px solid black;
   position: relative;
   left: 2px;
-}
-
-/* Переопределить заголовок окна (в Window он захардкожен как "Sample") */
-:deep(.titlebar-text span) {
-  font-size: 0 !important;
-  text-shadow: none !important;
-}
-
-:deep(.titlebar-text)::after {
-  content: "Регистрация на Игровой Джем";
-  font-family: "Bold12";
-  font-size: 24px;
-  color: white;
-  text-shadow: 2px 2px 0 black;
-  white-space: nowrap;
-}
-
-/* Скрыть кнопки «свернуть» и «развернуть» в тайтлбаре (оставить только X) */
-:deep(.titlebar-content > :nth-child(3)),
-:deep(.titlebar-content > :nth-child(4)),
-:deep(.titlebar-content > :nth-child(5)) {
-  display: none;
-}
-
-:deep(textarea)::-webkit-scrollbar {
-  width: 32px;
-}
-
-:deep(textarea)::-webkit-scrollbar-track {
-  background: #c0c0c0;
-}
-
-:deep(textarea)::-webkit-scrollbar-thumb {
-  background: #dfdfdf;
-  border: 2px solid;
-  border-color: #ffffff #808080 #808080 #ffffff;
-}
-
-:deep(textarea)::-webkit-scrollbar-button:single-button {
-  background: #c0c0c0;
-  border: 2px solid;
-  border-color: #ffffff #808080 #808080 #ffffff;
-  height: 32px;
 }
 
 .wizard-main {
