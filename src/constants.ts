@@ -1,0 +1,1 @@
+export const EVENT_NOW = 'ludum-dare-2026-1'

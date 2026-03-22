@@ -91,7 +91,7 @@ const shouldBeCompact = computed(() => {
       </div>
       <Box type="indent" :extra-styles="{margin: '8px'}">
         <YandexMap
-          :settings="{ location: { center: [73.387463, 54.985395], zoom: 17 }, behaviors: [ 'drag', 'pinchZoom' ]  }"
+          :settings="{ location: { center: [73.387463, 54.985395], zoom: 17 }, behaviors: [ 'drag', 'pinchZoom' ] }"
           style="height: 300px"
         >
           <YandexMapDefaultSchemeLayer />

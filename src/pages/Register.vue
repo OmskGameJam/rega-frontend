@@ -9,6 +9,7 @@ import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
 import AudioButton from '../components/AudioButton.vue'
+import { EVENT_NOW } from '../constants'
 
 const router = useRouter()
 
@@ -130,6 +131,7 @@ async function submit() {
 
     ym(YM_COUNTER, 'reachGoal', 'rega')
     window.localStorage.setItem('my-team', res.data.id)
+    window.localStorage.setItem('edition', EVENT_NOW)
     submitSuccess.value = true
   } catch (e) {
     submitError.value = e instanceof Error ? e.message : 'Неизвестная ошибка'
