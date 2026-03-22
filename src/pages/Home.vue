@@ -29,7 +29,7 @@ const shouldBeCompact = computed(() => {
           <Typography shorthand="Bold12">
             Омский Людум Даре
           </Typography> - это <WeirdText text="ЛЕГЕНДАРНЫЙ" /> омский хакатон по разработке ИГР.<br />
-          Собираемся 5 января в 10:00 в ИТ-парке на Комарова 21 к1 в городе Омске и пишем игру ДВА ДНЯ.
+          Собираемся 18 апреля в 10:00 в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
         </p><br>
         <br>
         <p>
@@ -80,23 +80,23 @@ const shouldBeCompact = computed(() => {
       <div style="display: flex; gap: 8px">
         <NamedPanel label="Место">
           <Typography shorthand="Bold12">
-            ИТ-парк Омск
+            Точка Кипения Омск
           </Typography>
         </NamedPanel>
         <NamedPanel label="Адерс">
           <Typography shorthand="Bold12">
-            Омск, пр. Комарова, 21 к1
+            Омск, ул. Маршала Жукова, 21
           </Typography>
         </NamedPanel>
       </div>
       <Box type="indent" :extra-styles="{margin: '8px'}">
         <YandexMap
-          :settings="{ location: { center: [73.309408, 54.983200], zoom: 17 } }"
+          :settings="{ location: { center: [73.387463, 54.985395], zoom: 17 }, behaviors: [ 'drag', 'pinchZoom' ]  }"
           style="height: 300px"
         >
           <YandexMapDefaultSchemeLayer />
           <YandexMapDefaultFeaturesLayer />
-          <YandexMapMarker :settings="{ coordinates: [73.310165, 54.983346] }">
+          <YandexMapMarker :settings="{ coordinates: [73.387091, 54.985378] }">
             <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap;">
               Вход туташки!
             </div>

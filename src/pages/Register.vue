@@ -267,8 +267,8 @@ function goToTeams() {
               <Box type="border-groove" :extra-styles="{ padding: '12px', marginTop: '12px' }">
                 <RadioButton
                   v-model="formData.where"
-                  value="Из ИТ-парка"
-                  label="С нами, из ИТ-парка на Комарова 21 к1"
+                  value="Из Точки Кипения"
+                  label="С нами, из Точки Кипения на Жукова 21"
                 />
                 <RadioButton
                   v-model="formData.where"
