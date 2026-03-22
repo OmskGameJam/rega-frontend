@@ -1,6 +1,5 @@
 <template>
   <div class="mode7-container" :style="containerStyle">
-    <!-- DEBUG PANEL -->
     <!-- SCENE -->
     <div
       v-for="layer in layers"
@@ -9,53 +8,57 @@
       :style="getLayerStyle(layer)"
     />
   </div>
-  <Window v-if="showDebug" title="debug" resizable-horizontally resizable-vertically resizable>
-    <template #titlebar-buttons>
-      <Button 
-        extra-class="titlebar-button" 
-        base-type="panel-d-2"
-        @click="showDebug = false"
-      >
-        <img draggable="false" src="/node_modules/win-55-ui-vue/public/win-55-ui/window/x.png" />
-      </Button>
-    </template>
-    <div style="width: calc(100% - 2px); height: calc(100% - 40px); overflow: scroll; box-sizing: border-box;">
-      <h3>Global</h3>
 
-      <label>Perspective {{ settings.perspective }}</label>
-      <input v-model.number="settings.perspective" type="range" min="100" max="2000" />
+  <Teleport to="body">
+    <Window v-if="showDebug" title="debug" resizable-horizontally resizable-vertically resizable>
+      <template #titlebar-buttons>
+        <Button 
+          extra-class="titlebar-button" 
+          base-type="panel-d-2"
+          @click="showDebug = false"
+        >
+          <img draggable="false" src="/node_modules/win-55-ui-vue/public/win-55-ui/window/x.png" />
+        </Button>
+      </template>
 
-      <label>Camera RotateZ {{ settings.cameraRotateZ }}</label>
-      <input v-model.number="settings.cameraRotateZ" type="range" min="-180" max="180" />
+      <div style="width: calc(100% - 2px); height: calc(100% - 40px); overflow: scroll; box-sizing: border-box;">
+        <h3>Global</h3>
 
-      <label>Global Scale {{ settings.scale }}</label>
-      <input v-model.number="settings.scale" type="range" min="0.1" max="3" step="0.1" />
+        <label>Perspective {{ settings.perspective }}</label>
+        <input v-model.number="settings.perspective" type="range" min="100" max="2000" />
 
-      <hr />
+        <label>Camera RotateZ {{ settings.cameraRotateZ }}</label>
+        <input v-model.number="settings.cameraRotateZ" type="range" min="-180" max="180" />
 
-      <div v-for="layer in layers" :key="layer.id" class="layer-controls">
-        <h4>{{ layer.id }}</h4>
+        <label>Global Scale {{ settings.scale }}</label>
+        <input v-model.number="settings.scale" type="range" min="0.1" max="3" step="0.1" />
 
-        <label>SpeedX {{ layer.speedX }}</label>
-        <input v-model.number="layer.speedX" type="range" min="-300" max="300" />
+        <hr />
 
-        <label>SpeedY {{ layer.speedY }}</label>
-        <input v-model.number="layer.speedY" type="range" min="-300" max="300" />
+        <div v-for="layer in layers" :key="layer.id" class="layer-controls">
+          <h4>{{ layer.id }}</h4>
 
-        <label>Z {{ layer.z }}</label>
-        <input v-model.number="layer.z" type="range" min="-2000" max="2000" />
+          <label>SpeedX {{ layer.speedX }}</label>
+          <input v-model.number="layer.speedX" type="range" min="-300" max="300" />
 
-        <label>RotateX {{ layer.rotation }}</label>
-        <input v-model.number="layer.rotation" type="range" min="0" max="90" />
+          <label>SpeedY {{ layer.speedY }}</label>
+          <input v-model.number="layer.speedY" type="range" min="-300" max="300" />
 
-        <label>RotateZ {{ layer.rotateZ }}</label>
-        <input v-model.number="layer.rotateZ" type="range" min="-180" max="180" />
+          <label>Z {{ layer.z }}</label>
+          <input v-model.number="layer.z" type="range" min="-2000" max="2000" />
 
-        <label>Scale {{ layer.scale }}</label>
-        <input v-model.number="layer.scale" type="range" min="0.1" max="3" step="0.1" />
+          <label>RotateX {{ layer.rotation }}</label>
+          <input v-model.number="layer.rotation" type="range" min="0" max="90" />
+
+          <label>RotateZ {{ layer.rotateZ }}</label>
+          <input v-model.number="layer.rotateZ" type="range" min="-180" max="180" />
+
+          <label>Scale {{ layer.scale }}</label>
+          <input v-model.number="layer.scale" type="range" min="0.1" max="3" step="0.1" />
+        </div>
       </div>
-    </div>
-  </Window>
+    </Window>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -81,20 +84,20 @@ type Layer = {
   scale: number
 }
 
-const showDebug = ref<boolean>(true);
+const showDebug = ref<boolean>(true)
 
 const settings = reactive({
   perspective: 385,
   cameraRotateZ: 0,
-  scale: 1
+  scale: 2
 })
 
 const layers = reactive<Layer[]>([
   {
     id: "ground",
-    image: "/summer.png",
-    width: 1280,
-    height: 800,
+    image: "/the-big-one.png",
+    width: 1200,
+    height: 604,
     offsetX: 0,
     offsetY: 0,
     speedX: 5,
@@ -118,9 +121,9 @@ const layers = reactive<Layer[]>([
     rotateZ: -13,
     scale: 1
   },
-    {
+  {
     id: "clouds",
-    image: "/minecraft-clouds.png",
+    image: "/clouds.png",
     width: 1024,
     height: 1024,
     offsetX: 0,
@@ -155,13 +158,14 @@ function getLayerStyle(layer: Layer) {
   const tx = -layer.offsetX
   const ty = -layer.offsetY
 
-  const cx = -layer.width * 1.5
-  const cy = -layer.height * 1.5
+  // Center based on layer size (more stable)
+  const cx = -layer.width * 0.5
+  const cy = -layer.height * 0.5
 
   return {
     backgroundImage: `url(${layer.image})`,
     transform: `
-      translate(-50%, -50%)
+      translate(-50vw, -50vh)
       rotateX(${layer.rotation}deg)
       rotateZ(${layer.rotateZ + settings.cameraRotateZ}deg)
       translateZ(${layer.z}px)
@@ -206,46 +210,31 @@ onMounted(() => {
   height: 100vh;
 
   overflow: hidden;
-
   transform-style: preserve-3d;
+}
+
+@media (max-width: 1000px) {
+  .mode7-container {
+    width: 1000px;
+    height: 1000px;
+  }
 }
 
 /* LAYERS */
 .layer {
   position: absolute;
 
-  width: 600%;
-  height: 600%;
+  width: 300%;
+  height: 300%;
 
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
 
-  transform-origin: 50% 50%; /* IMPORTANT */
+  transform-origin: center center;
+  will-change: transform;
 }
 
 /* DEBUG PANEL */
-.debug {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  width: 260px;
-  max-height: 90vh;
-  overflow: auto;
-
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-
-  font-size: 12px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.debug input {
-  width: 100%;
-  margin-bottom: 6px;
-}
-
 .layer-controls {
   border-top: 1px solid rgba(255,255,255,0.2);
   margin-top: 8px;
