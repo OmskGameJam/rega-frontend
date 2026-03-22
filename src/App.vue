@@ -2,6 +2,7 @@
 import { Box, Typography, Window} from 'win-55-ui-vue'
 import { useResponsiveBreakpoint } from './composable/useResponsiveBreakpoint';
 import Mode7 from './components/Mode7.vue';
+import Pipes from './components/Pipes.vue';
 const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 </script>
 
@@ -13,7 +14,7 @@ const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
         <router-link to="/">
           <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
         </router-link>
-        <canvas style="width: 100%; height: 512px" />
+        <Pipes />
       </Box>
     </Window>
   </div>
