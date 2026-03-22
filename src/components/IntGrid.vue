@@ -37,6 +37,8 @@ function collectChildren() {
 
 // 🆕 Read per-child offsets
 function getOffset(el: HTMLElement) {
+
+  if (!props.useOffsets) { return {x: 0, y: 0}}
   const x = Number(el.dataset.offsetX ?? 0)
   const y = Number(el.dataset.offsetY ?? 0)
 

@@ -6,7 +6,7 @@ const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 </script>
 
 <template>
-  <Mode7 />
+  <Mode7 :flat2-d="breakpoint < 800" />
   <div>
     <Window v-if="$route.path !== '/registration'" faux title="Welcome!" style="margin: 32px">
       <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">

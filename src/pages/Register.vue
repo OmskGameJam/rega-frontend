@@ -83,13 +83,13 @@ const SIDEBAR_IMAGES: Record<number, string> = {
   1: '/2-identity.png',
   2: '/3-experience.png',
   3: '/4-contact.png',
-  4: '/',
+  4: '/5-team.png',
   5: '/6-location.png',
-  6: '/win-55-ui/icons/program.png',
-  7: '/win-55-ui/icons/program.png',
-  8: '/win-55-ui/icons/program.png',
-  9: '/win-55-ui/icons/program.png',
-  10: '/win-55-ui/icons/program.png',
+  6: '/7-tech.png',
+  7: '/8-prepare.png',
+  8: '/9-advice.png',
+  9: '/10-legal.png',
+  10: '/11-final.png',
 }
 
 const sidebarImage = computed(() => SIDEBAR_IMAGES[currentStep.value] ?? SIDEBAR_IMAGES[0])
