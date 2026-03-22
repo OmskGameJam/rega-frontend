@@ -8,6 +8,7 @@ import BaseTextarea from '../components/BaseTextarea.vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
+import AudioButton from '../components/AudioButton.vue'
 
 const router = useRouter()
 
@@ -78,13 +79,6 @@ function goHome() {
   router.push('/')
 }
 
-function handleWindowClick(e: MouseEvent) {
-  const target = e.target as HTMLElement
-  if (target instanceof HTMLImageElement && target.src.includes('window/x.png')) {
-    goHome()
-  }
-}
-
 const SIDEBAR_IMAGES: Record<number, string> = {
   0: '/1-welcome.png',
   1: '/2-identity.png',
@@ -151,7 +145,7 @@ function goToTeams() {
 
 <template>
   <div class="rega-bg" />
-  <div class="wizard-overlay" @click="handleWindowClick">
+  <div class="wizard-overlay">
     <Typography font-color="black">
       <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
       <Window
@@ -164,6 +158,9 @@ function goToTeams() {
         title="Регистрация"
         :extra-styles="{ overflow: 'hidden', display: 'flex', flexDirection: 'column', ...(isMobile ? { left: '0px', top: '0px' } : {}) }"
       >
+        <template #titlebar-buttons>
+          <AudioButton src="/rega.mid.mp3" />
+        </template>
         <div class="wizard-body">
           <div class="wizard-sidebar">
             <img :src="sidebarImage" class="wizard-sidebar-image" draggable="false" />
