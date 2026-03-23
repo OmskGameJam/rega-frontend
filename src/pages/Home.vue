@@ -7,6 +7,7 @@ import { computed } from 'vue';
 import WeirdText from '../components/WeirdText.vue';
 import RegBtn from './RegBtn.vue';
 import CmdMiner from '../components/CmdMiner.vue';
+import ScrollIndicator from '../components/ScrollIndicator.vue';
 
 const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
 const shouldBeCompact = computed(() => {
@@ -126,6 +127,7 @@ const shouldBeCompact = computed(() => {
       </Box>
     </Window>
   </IntGrid>
+  <ScrollIndicator />
 </template>
 
 
