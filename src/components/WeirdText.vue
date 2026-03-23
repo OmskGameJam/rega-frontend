@@ -195,6 +195,7 @@ watch(
   position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
 }
 
 /* ✅ fallback styling (kept minimal, same layout intent) */
