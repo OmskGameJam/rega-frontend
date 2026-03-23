@@ -38,8 +38,13 @@ const shouldBeCompact = computed(() => {
         <br>
         <p>
           Можно участвовать в соло или в команде из 2..5 человек, вживую или удалённо (но лучше вживую!) <a target="_blank" href="https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48">Подробнее о формате мероприятия</a>
-          <br>
+          <br><br>
         </p>
+        <br>
+        <div style="display: flex">
+          <div style="flex-grow: 1;">Чат в Телеграме: <a href="https://t.me/omsky_gamedev">t.me/omsky_gamedev</a></div>
+          <div float="right">Информация дублируется в ВК: <a href="https://vk.com/old48">https://vk.com/old48</a> (<a href="https://vk.me/join/hV7iMiKbpoS3OUQ93fseqhA8btMBUVtEQRA=">чат</a>)</div>
+        </div>
       </Box>
     </Window>
     <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false" :use-offsets="!shouldBeCompact">

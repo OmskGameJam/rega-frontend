@@ -395,18 +395,25 @@ function goToTeams() {
                 />
               </div>
 
-              <p class="wizard-privacy-note">
-                О формате Игрового Джема можно почитать
-                <a href="https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48" target="_blank">
-                  по ссылке
-                </a>
-              </p>
-              <p class="wizard-privacy-note">
-                Отправляя форму вы соглашаетесь с
-                <router-link to="/privacy" target="_blank">
-                  политикой конфиденциальности
-                </router-link>
-              </p>
+              <div class="wizard-privacy-note" style="margin-top: 28px;">
+                <div class="mini-br">
+                  О формате Игрового Джема можно почитать
+                  <a href="https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48" target="_blank">
+                    по ссылке.
+                  </a>
+                </div>
+
+                <div class="mini-br">
+                  Чат Омского Геймдева: <a href="https://t.me/omsky_gamedev">тут!</a> ВК: <a target="_blank" href="https://vk.com/old48">тут!</a>
+                </div>
+
+                <div class="mini-br">
+                  Отправляя форму вы соглашаетесь с
+                  <router-link to="/privacy" target="_blank">
+                    политикой конфиденциальности
+                  </router-link>
+                </div>
+              </div>
             </template>
 
             <!-- Шаг 10: Завершение -->
@@ -679,5 +686,10 @@ function goToTeams() {
   .wizard-footer {
     justify-content: space-between;
   }
+
 }
+
+  .mini-br:not(:last-child) {
+    margin-bottom: 8px;
+  }
 </style>
