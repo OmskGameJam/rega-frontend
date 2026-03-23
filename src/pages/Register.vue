@@ -628,6 +628,10 @@ function goToTeams() {
 }
 
 @media (max-width: 760px) {
+  .wizard-overlay {
+    position: initial;
+  }
+
   .wizard-sidebar {
     display: none;
   }
