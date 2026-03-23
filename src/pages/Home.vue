@@ -30,25 +30,16 @@ const shouldBeCompact = computed(() => {
             Омский Людум Даре
           </Typography> - это <WeirdText text="ЛЕГЕНДАРНЫЙ" /> омский хакатон по разработке ИГР.<br />
           Собираемся 18 апреля в 10:00 в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
-        </p><br>
+        </p>
         <br>
         <p>
-          Стартуем одновременно с <a target="_blank" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ">
-            <StringCycler :strings="[
-              'undefined', '[object Object]', 'ERROR', 'ReferenceError',
-              'NullPointerException', 'NaN', 'DivisionByZeroException',
-              '[screaming externally]', 'VibeCheckNotPassedException',
-              'Abort, Retry, Ignore, Fail?', '?REDO FROM START',
-              'lp0 on fire', 'Guru Meditation'
-            ]" />
-          </a>...?
+          Стартуем одновременно с мировым <a target="_blank" href="https://ldjam.com/">Ludum Dare #59</a>
           <br />
         </p>
-        <p>
-          В этот раз мы не синхронизируемся с каким-то мировым джемом! Тему подберём сами и анонсируем в день начала.
-        </p>
+        <br>
         <p>
           Можно участвовать в соло или в команде из 2..5 человек.
+          <br>
         </p>
       </Box>
     </Window>
