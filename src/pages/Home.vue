@@ -3,7 +3,7 @@ import { Box, NamedPanel, Typography, Window } from 'win-55-ui-vue'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
 import IntGrid from '../components/IntGrid.vue';
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import WeirdText from '../components/WeirdText.vue';
 import RegBtn from './RegBtn.vue';
 import CmdMiner from '../components/CmdMiner.vue';
@@ -13,6 +13,25 @@ const { breakpoint } = useResponsiveBreakpoint(16, [720, 1000, 1200])
 const shouldBeCompact = computed(() => {
   return breakpoint.value <= 720
 })
+
+const blinkColor = ref<string>('')
+
+onMounted(() => {
+  const COLOR_A = '#FF4444'
+  const COLOR_B = '#4444FF'
+
+  let toggle = false
+
+  const interval = setInterval(() => {
+    toggle = !toggle
+    blinkColor.value = toggle ? COLOR_A : COLOR_B
+  }, 500)
+
+  onUnmounted(() => {
+    clearInterval(interval)
+  })
+})
+
 </script>
 <template>
   <CmdMiner />
@@ -97,9 +116,11 @@ const shouldBeCompact = computed(() => {
           <YandexMapDefaultSchemeLayer />
           <YandexMapDefaultFeaturesLayer />
           <YandexMapMarker :settings="{ coordinates: [73.387091, 54.985378] }">
-            <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap;">
-              Вход туташки!
-            </div>
+            <Typography shorthand="Bold12" :font-color="blinkColor">
+              <div style="background: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap;">
+                Вход туташки!
+              </div>
+            </Typography>
           </YandexMapMarker>
         </YandexMap>
       </Box>
