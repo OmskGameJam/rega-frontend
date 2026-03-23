@@ -134,7 +134,7 @@ const shouldBeCompact = computed(() => {
     display: flex;
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 1100px) {
     .contact {
       flex-direction: column;
       gap: 32px
