@@ -11,6 +11,20 @@ import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
 import AudioButton from '../components/AudioButton.vue'
 import { EVENT_NOW } from '../constants'
 
+type RegaFormData = {
+  name: string
+  exp: string
+  contact: string
+  members: string
+  where: string
+  tech: string
+  prepare: string
+  advice: string
+  joined: boolean
+  public: boolean
+  hideteam: boolean
+}
+
 const router = useRouter()
 
 const { width: viewportWidth, height: viewportHeight } = useResponsiveBreakpoint(0, [640, 1000])
@@ -34,7 +48,7 @@ onMounted(() => {
   windowY.value = Math.max(20, Math.round((window.innerHeight - 660) / 2))
 })
 
-const formData = ref({
+const formData = ref<RegaFormData>({
   name: '',
   exp: '',
   contact: '',
@@ -46,6 +60,24 @@ const formData = ref({
   joined: false,
   public: true,
   hideteam: false,
+})
+
+onMounted(() => {
+  const dataRaw = localStorage.getItem('rega-form-state')
+  if (!dataRaw) return
+
+  try {
+    const data = JSON.parse(dataRaw) as Partial<FormData>
+
+    for (const key of Object.keys(data) as (keyof FormData)[]) {
+      if (key in formData.value) {
+        // @ts-expect-error cba
+        formData.value[key] = data[key] as FormData[keyof FormData]
+      }
+    }
+  } catch {
+    // ignore invalid JSON
+  }
 })
 
 const canGoNext = computed(() => {
@@ -68,6 +100,7 @@ function goNext() {
   if (currentStep.value < TOTAL_STEPS && canGoNext.value) {
     currentStep.value++
   }
+  localStorage.setItem('rega-form-state', JSON.stringify(formData.value))
 }
 
 function goBack() {
