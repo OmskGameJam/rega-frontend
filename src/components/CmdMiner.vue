@@ -7,7 +7,7 @@ const linesVisible = ref(0);
 
 
 onMounted(() => {
-  if (Math.random()<1) {
+  if (Math.random()<0.1) {
     setTimeout(() => {
         visible.value = true
       }, 800)
