@@ -41,12 +41,12 @@ const shouldBeCompact = computed(() => {
           <br><br>
         </p>
         <br>
-        <div style="display: flex">
+        <div class="contact">
           <div style="flex-grow: 1;">
-            Чат в Телеграме: <a href="https://t.me/omsky_gamedev">t.me/omsky_gamedev</a>
+            Чат в Телеграме: <a target="_blank" href="https://t.me/omsky_gamedev">t.me/omsky_gamedev</a>
           </div>
           <div float="right">
-            Информация дублируется в ВК: <a href="https://vk.com/old48">https://vk.com/old48</a> (<a href="https://vk.me/join/hV7iMiKbpoS3OUQ93fseqhA8btMBUVtEQRA=">чат</a>)
+            Информация дублируется в ВК: <a target="_blank" href="https://vk.com/old48">https://vk.com/old48</a> (<a href="https://vk.me/join/hV7iMiKbpoS3OUQ93fseqhA8btMBUVtEQRA=">чат</a>)
           </div>
         </div>
       </Box>
@@ -115,15 +115,29 @@ const shouldBeCompact = computed(() => {
     <RegBtn />
     <Window icon="/icons/ogd.png" faux title="Контакты">
       <Box type="textarea" :extra-styles="{padding: '24px'}">
-        <div style="display: flex">
+        <div class="contact">
           <div style="flex-grow: 1;">
-            Чат в Телеграме: <a href="https://t.me/omsky_gamedev">t.me/omsky_gamedev</a>
+            Чат в Телеграме: <a target="_blank" href="https://t.me/omsky_gamedev">https://t.me/omsky_gamedev</a>
           </div>
-          <div float="right">
-            Информация дублируется в ВК: <a href="https://vk.com/old48">https://vk.com/old48</a> (<a href="https://vk.me/join/hV7iMiKbpoS3OUQ93fseqhA8btMBUVtEQRA=">чат</a>)
+          <div>
+            Информация дублируется в ВК: <a target="_blank" href="https://vk.com/old48">https://vk.com/old48</a> (<a target="_blank" href="https://vk.me/join/hV7iMiKbpoS3OUQ93fseqhA8btMBUVtEQRA=">чат</a>)
           </div>
         </div>
       </Box>
     </Window>
   </IntGrid>
 </template>
+
+
+<style>
+  .contact {
+    display: flex;
+  }
+
+  @media (max-width: 720px) {
+    .contact {
+      flex-direction: column;
+      gap: 32px
+    }
+  }
+</style>
