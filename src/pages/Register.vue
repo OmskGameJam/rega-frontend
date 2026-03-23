@@ -396,6 +396,12 @@ function goToTeams() {
               </div>
 
               <p class="wizard-privacy-note">
+                О формате Игрового Джема можно почитать
+                <a href="https://vk.com/@-41503523-chto-za-ludum-dare-aka-old48" target="_blank">
+                  по ссылке
+                </a>
+              </p>
+              <p class="wizard-privacy-note">
                 Отправляя форму вы соглашаетесь с
                 <router-link to="/privacy" target="_blank">
                   политикой конфиденциальности
