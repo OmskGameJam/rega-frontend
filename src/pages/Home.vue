@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Box, NamedPanel, Typography, Window } from 'win-55-ui-vue'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
-import StringCycler from '../components/StringCycler.vue';
 import IntGrid from '../components/IntGrid.vue';
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
 import { computed } from 'vue';

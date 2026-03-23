@@ -3,15 +3,32 @@ import { ref, onMounted } from 'vue'
 import { Typography, Window } from 'win-55-ui-vue'
 
 const visible = ref(false)
+const linesVisible = ref(0);
+
 
 onMounted(() => {
-  if (Math.random()<0.1) {
+  if (Math.random()<1) {
     setTimeout(() => {
         visible.value = true
       }, 800)
     setTimeout(() => {
-      visible.value = false
+        linesVisible.value += 1
+      }, 900)
+    setTimeout(() => {
+        linesVisible.value += 1
+      }, 1200)
+    setTimeout(() => {
+        linesVisible.value += 1
+      }, 1500)
+    setTimeout(() => {
+      linesVisible.value += 1
+    }, 1600)
+    setTimeout(() => {
+      linesVisible.value += 1
     }, 1700)
+    setTimeout(() => {
+      visible.value = false
+    }, 1800)
   }
 })
 </script>
@@ -21,20 +38,20 @@ onMounted(() => {
     <Window
       title="C:\Windows\system32\cmd.exe"
       :width="800"
-      :height="280"
+      :height="284"
       :extra-styles="{ position: 'relative', left: 'auto', top: 'auto' }"
     >
       <div class="cmd-body">
         <Typography shorthand="Bold12">
-          Microslop(R) Windows 55<br />
-          (c) Корпорация Майкрософт. Все права защищены.<br />
+          <span v-if="linesVisible > 0">Microslop(R) Windows 55</span><br />
+          <span v-if="linesVisible > 0">(c) Корпорация Майкрософт. Все права защищены.</span><br />
           <br />
-          C:\Users\User&gt; cd C:\Program Files\OmskMiner<br />
-          C:\Program Files\OmskMiner&gt; start omsk_miner.exe --silent<br />
+          <span v-if="linesVisible > 1">C:\Users\User&gt; cd C:\Program Files\OmskMiner</span><br />
+          <span v-if="linesVisible > 2">C:\Program Files\OmskMiner&gt; start omsk_miner.exe --silent</span><br />
           <br />
           <br />
-          [OK] Подключение к пулу omsk-pool.crypto.gg:322...<br />
-          [OK] Начинаю майнинг OmskCoin...
+          <span v-if="linesVisible > 3">[OK] Подключение к пулу omsk-pool.crypto.gg:322...</span><br />
+          <span v-if="linesVisible > 4">[OK] Начинаю майнинг OmskCoin...</span><br>
         </Typography>
       </div>
     </Window>
