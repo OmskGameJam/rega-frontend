@@ -84,7 +84,7 @@ type Layer = {
   scale: number
 }
 
-const showDebug = ref<boolean>(true)
+const showDebug = ref<boolean>(false)
 
 const settings = reactive({
   perspective: 385,
