@@ -112,7 +112,7 @@ function trimTeamName(n: string) {
           <br />
           <div>
             <Typography shorthand="Bold12">
-              Как готовится:
+              Как готовиться:
             </Typography> {{ t.prepare }}
           </div>
           <div>
