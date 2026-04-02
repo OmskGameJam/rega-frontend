@@ -19,6 +19,7 @@ jobs:
       - run: echo omsky-gamedev.ru > dist/CNAME
       - run: cp dist/index.html dist/teams.html
       - run: cp dist/index.html dist/privacy.html
+      - run: cp dist/index.html dist/registration.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
