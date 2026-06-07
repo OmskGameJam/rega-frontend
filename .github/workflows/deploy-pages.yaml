@@ -20,6 +20,7 @@ jobs:
       - run: cp dist/index.html dist/teams.html
       - run: cp dist/index.html dist/privacy.html
       - run: cp dist/index.html dist/registration.html
+      - run: cp dist/index.html dist/about.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:

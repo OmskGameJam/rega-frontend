@@ -10,6 +10,7 @@ import HomePage from './pages/Home.vue'
 import TeamsPage from './pages/Teams.vue'
 import PrivacyPage from './pages/Privacy.vue'
 import RegisterPage from './pages/Register.vue'
+import AboutPage from './pages/About.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,7 @@ const router = createRouter({
     { path: '/registration', component: RegisterPage },
     { path: '/teams', component: TeamsPage },
     { path: '/privacy', component: PrivacyPage },
+    { path: '/about', component: AboutPage },
   ],
 })
 
