@@ -40,19 +40,19 @@ onMounted(() => {
     <Window icon="/icons/ogd.png" faux title="О программе">
       <IntGrid :gap="16" :columns="1" align="center" :element-width="breakpoint < 840 ? breakpoint - 64 : 840" style="text-align: center;">
         <Typography shorthand="Regular24" element="h1">
-          Омский Игровой Хакатон 18&NoBreak;-&NoBreak;19&NoBreak; &NoBreak;апреля&NoBreak;!
+          Омский Игровой Хакатон 25&NoBreak;-&NoBreak;26&NoBreak; &NoBreak;июля&NoBreak;!
         </Typography>
       </IntGrid>
       <Box type="textarea" :extra-styles="{padding: '24px'}">
         <p>
           <Typography shorthand="Bold12">
-            Омский Людум Даре
+            Игровое Варенье
           </Typography> - это <WeirdText text="ЛЕГЕНДАРНЫЙ" /> омский хакатон по разработке ИГР.<br />
-          Собираемся 18 апреля в 10:00 в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
+          Собираемся 25 июля в 10:00 в Точке Кипения на Жукова 21 в городе Омске и пишем игру ДВА ДНЯ.
         </p>
         <br>
         <p>
-          Стартуем одновременно с мировым <a target="_blank" href="https://ldjam.com/">Ludum Dare #59</a>
+          Проходит одновременно с мировым <a target="_blank" href="https://gmtk.itch.io/">GMTK</a>
           <br />
         </p>
         <br>
@@ -72,7 +72,7 @@ onMounted(() => {
       </Box>
     </Window>
     <IntGrid mode="columns" :columns="shouldBeCompact ? 1 : 2" :margin-gap="false" :use-offsets="!shouldBeCompact">
-      <Window icon="/icons/calendar.png" data-offset-x="-32" data-offset-y="32" title="Суббота, 18 апреля" faux>
+      <Window icon="/icons/calendar.png" data-offset-x="-32" data-offset-y="32" title="Суббота, 25 июля" faux>
         <ul style="margin: 16px;">
           <li>Анонс темы хакатона в чате <a href="https://t.me/omsky_gamedev" target="_blank">https://t.me/omsky_gamedev</a></li>
           <li>Открытие в 10:00</li>
@@ -81,7 +81,7 @@ onMounted(() => {
           <li>Уходим домой в 20:00</li>
         </ul>
       </Window>
-      <Window icon="/icons/calendar.png" data-offset-x="32" title="Воскресенье, 19 апреля" faux>
+      <Window icon="/icons/calendar.png" data-offset-x="32" title="Воскресенье, 26 июля" faux>
         <ul style="margin: 16px;">
           <li>Открытие в 10:00</li>
           <li>Делаем игры</li>
