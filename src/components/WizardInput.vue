@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, type CSSProperties } from 'vue'
-import { Box, typographyStyles } from 'win-55-ui-vue'
+import { onMounted, ref, type CSSProperties } from 'vue'
+import { BaseInput } from 'win-55-ui-vue'
 
 withDefaults(defineProps<{
   modelValue: string
@@ -18,39 +18,22 @@ const emit = defineEmits<{
   'enter': []
 }>()
 
-const inputRef = ref<HTMLInputElement>()
+const inputRef = ref<InstanceType<typeof BaseInput>>()
 
 onMounted(() => {
-  inputRef.value?.focus()
+  inputRef.value?.el?.focus()
 })
-
-const handleInput = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLInputElement).value)
-}
-
-const inputStyle = computed<CSSProperties>(() => ({
-  width: '100%',
-  boxSizing: 'border-box',
-  border: 'none',
-  outline: 'none',
-  background: 'transparent',
-  padding: '2px 4px',
-  margin: '0',
-  ...typographyStyles({ fontColor: 'black' }),
-}))
 </script>
 
 <template>
-  <Box type="textarea" :extra-styles="extraStyles">
-    <input
-      ref="inputRef"
-      type="text"
-      :value="modelValue"
-      :placeholder="placeholder"
-      :maxlength="maxLength"
-      :style="inputStyle"
-      @input="handleInput"
-      @keydown.enter="emit('enter')"
-    />
-  </Box>
+  <BaseInput
+    ref="inputRef"
+    :model-value="modelValue"
+    :placeholder="placeholder"
+    :max-length="maxLength"
+    :extra-styles="extraStyles"
+    show-emoji-button
+    @update:model-value="emit('update:modelValue', $event)"
+    @keydown.enter="emit('enter')"
+  />
 </template>

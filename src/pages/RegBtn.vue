@@ -37,7 +37,7 @@ const balloonEnabled = computed(() => {
           </router-link>
         </template>
         <Button :extra-styles="{width: '350px'}" @click="navigate">
-          <img src="/public/icon-register.png" />
+          <img src="/icon-register.png" />
           <span style="position: relative; top: -14px; left: 10px"><Typography font-color="#FFFFFF" font-shadow-color="#000000" shorthand="Bold12">Регистрация команды</Typography></span>
         </Button>
       </Balloon>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window } from 'win-55-ui-vue'
+import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window, RichText } from 'win-55-ui-vue'
 import WizardInput from '../components/WizardInput.vue'
 import FileCopyWindow from '../components/FileCopyWindow.vue'
 import BaseTextarea from '../components/BaseTextarea.vue'
@@ -10,6 +10,7 @@ import { YM_COUNTER } from '../helpers/constants'
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
 import AudioButton from '../components/AudioButton.vue'
 import { EVENT_NOW } from '../constants'
+import { customEmojiDirective as vEmoji } from 'win-55-ui-vue'
 
 type RegaFormData = {
   name: string
@@ -130,15 +131,15 @@ const SIDEBAR_IMAGES: Record<number, string> = {
 const sidebarImage = computed(() => SIDEBAR_IMAGES[currentStep.value] ?? SIDEBAR_IMAGES[0])
 
 const summaryText = computed(() =>
-  `Команда: ${formData.value.name}\n` +
-  `Опыт: ${formData.value.exp}\n` +
-  `Контакты: ${formData.value.contact}\n` +
-  `О команде: ${formData.value.members}\n` +
-  `Где: ${formData.value.where}\n` +
-  `Движок: ${formData.value.tech}\n` +
-  `Подготовка: ${formData.value.prepare}\n` +
-  `Совет: ${formData.value.advice}\n` +
-  `Публичная команда: ${formData.value.public ? 'Да' : 'Нет'}\n` +
+  `Команда: ${formData.value.name}[br]` +
+  `Опыт: ${formData.value.exp}[br]` +
+  `Контакты: ${formData.value.contact}[br]` +
+  `О команде: ${formData.value.members}[br]` +
+  `Где: ${formData.value.where}[br]` +
+  `Движок: ${formData.value.tech}[br]` +
+  `Подготовка: ${formData.value.prepare}[br]` +
+  `Совет: ${formData.value.advice}[br]` +
+  `Публичная команда: ${formData.value.public ? 'Да' : 'Нет'}[br]` +
   `Скрывать участников: ${formData.value.hideteam ? 'Да' : 'Нет'}`
 )
 
@@ -180,7 +181,7 @@ function goToTeams() {
 
 <template>
   <div class="rega-bg" />
-  <div class="wizard-overlay">
+  <div v-emoji class="wizard-overlay">
     <Typography font-color="black">
       <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
       <Window
@@ -424,13 +425,13 @@ function goToTeams() {
               <p class="wizard-summary-note">
                 Проверьте данные и нажмите &laquo;Готово&raquo;:
               </p>
-              <Box type="textarea" :extra-styles="{ width: '100%', marginTop: '12px', padding: '4px' }">
-                <textarea
-                  readonly
-                  :value="summaryText"
-                  class="wizard-summary-textarea"
-                  rows="8"
-                />
+              <Box
+                type="textarea"
+                :extra-styles="{ width: '100%', marginTop: '12px', padding: '4px', height: 'calc(1.4em * 8)', overflowY: 'auto' }"
+              >
+                <RichText allow-links allow-sizes>
+                  {{summaryText}}
+                </RichText>
               </Box>
               <p v-if="submitError" class="wizard-error">
                 {{ submitError }}

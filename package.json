@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npm update win-55-ui-vue"
   },
   "dependencies": {
     "@types/three": "^0.183.1",
@@ -17,7 +18,7 @@
     "vue": "^3.5.0",
     "vue-router": "^4.5.0",
     "vue-yandex-maps": "^2.3.2",
-    "win-55-ui-vue": "github:OmskGameJam/win-55-ui#vue-migration"
+    "win-55-ui-vue": "github:OmskGameJam/win-55-ui#master"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
