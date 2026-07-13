@@ -1,1 +1,1 @@
-export const EVENT_NOW = 'ludum-dare-2026-1'
+export const EVENT_NOW = 'varenie-2026-07'

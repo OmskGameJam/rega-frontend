@@ -17,7 +17,7 @@
     "three": "^0.183.2",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0",
-    "vue-yandex-maps": "^2.3.2",
+    "vue-yandex-maps": "^3.0.4",
     "win-55-ui-vue": "github:OmskGameJam/win-55-ui#master"
   },
   "devDependencies": {
