@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Box, Typography, Window} from 'win-55-ui-vue'
+import { Typography, Window} from 'win-55-ui-vue'
 import { useResponsiveBreakpoint } from './composable/useResponsiveBreakpoint';
 import Mode7 from './components/Mode7.vue';
-import Pipes from './components/Pipes.vue';
+import LogoBoxIV from './components/LogoBoxIV.vue';
 const { breakpoint } = useResponsiveBreakpoint(16, [640, 1000, 1200])
 
 import { customEmojiDirective as vEmoji, EmojiPickerWindow } from 'win-55-ui-vue';
+
 
 </script>
 
@@ -13,12 +14,7 @@ import { customEmojiDirective as vEmoji, EmojiPickerWindow } from 'win-55-ui-vue
   <Mode7 v-if="breakpoint > 720" />
   <div v-emoji>
     <Window v-if="$route.path !== '/registration'" icon="/icons/pipes.png" faux title="Welcome!" style="margin: 32px">
-      <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">
-        <router-link to="/">
-          <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
-        </router-link>
-        <Pipes />
-      </Box>
+      <LogoBoxIV :breakpoint="breakpoint" />
     </Window>
   </div>
   <Typography>
@@ -26,12 +22,3 @@ import { customEmojiDirective as vEmoji, EmojiPickerWindow } from 'win-55-ui-vue
   </Typography>
   <EmojiPickerWindow />
 </template>
-
-<style scoped lang="css">
-  .logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)
-  }
-</style>
