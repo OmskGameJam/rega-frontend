@@ -99,7 +99,7 @@ const tick = (time: number) => {
   // Check the whole span travelled this frame (not just the endpoint), since at
   // typical frame speeds the instantaneous position can skip clean over a few-px
   // margin around a corner without ever landing inside it.
-  const CORNER_MARGIN = 3
+  const CORNER_MARGIN = 0
   const withinRange = (a: number, b: number, target: number, margin: number) => {
     const lo = Math.min(a, b) - margin
     const hi = Math.max(a, b) + margin
