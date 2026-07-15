@@ -284,8 +284,7 @@ function goToTeams() {
                 v-model="formData.members"
                 placeholder="Мы - Новая Команда, с нами: Олег - разработчик, Олег (1) - дизайнер"
                 :max-length="400"
-                :rows="6"
-                :extra-styles="{ width: '100%', marginTop: '12px' }"
+                :extra-styles="{ width: '100%', marginTop: '12px', height: '160px' }"
               />
             </template>
 
