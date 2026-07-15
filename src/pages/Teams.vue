@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Box, Typography, Window } from 'win-55-ui-vue'
+import { Box, RichText, Typography, Window } from 'win-55-ui-vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
 import IntGrid from '../components/IntGrid.vue'
+import { customEmojiDirective as vEmoji } from 'win-55-ui-vue';
 
 interface ITeamData {
   id: number
@@ -58,6 +59,7 @@ function trimTeamName(n: string) {
   </Box>
 
   <IntGrid v-else
+           v-emoji
            mode="auto-column"
            :element-width="512"
            align="center"
@@ -80,45 +82,47 @@ function trimTeamName(n: string) {
           <div>
             <Typography shorthand="Bold12">
               Название:
-            </Typography> {{ t.name }}
+            </Typography> <RichText>{{ t.name }}</RichText>
           </div>
           <br />
           <div>
             <Typography shorthand="Bold12">
               Опыт:
-            </Typography> {{ t.exp }}
+            </Typography> <RichText>{{ t.exp }}</RichText>
           </div>
           <div>
             <Typography shorthand="Bold12">
               Класс:
-            </Typography> {{ t.tech }}
+            </Typography> <RichText>{{ t.tech }}</RichText>
           </div>
           <div>
             <Typography shorthand="Bold12">
               Контакты:
-            </Typography> {{ t.contact }}
+            </Typography> <RichText>{{ t.contact }}</RichText>
           </div>
           <div>
             <Typography shorthand="Bold12">
               Где хакатонит:
-            </Typography> {{ t.where }}
+            </Typography> <RichText>{{ t.where }}</RichText>
           </div>
           <br />
           <div>
             <Typography shorthand="Bold12">
               Участники:
-            </Typography> {{ t.members }}
+            </Typography> <RichText allow-sizes>{{ t.members }}</RichText>
           </div>
           <br />
           <div>
             <Typography shorthand="Bold12">
-              Как готовиться:
-            </Typography> {{ t.prepare }}
+              Как готовится:
+            </Typography> <RichText>{{ t.prepare }}</RichText>
           </div>
           <div>
             <Typography shorthand="Bold12">
               Полезный совет:
-            </Typography> {{ t.advice }}
+            </Typography> <RichText>
+              {{ t.advice }}
+            </RichText>
           </div>
         </div>
       </Box>
