@@ -340,6 +340,7 @@ function place(event: PointerEvent, material: typeof LIFE | typeof SAND) {
   const index = y * columns + x
   if (cells[index] !== EMPTY) return
   cells[index] = material
+  if (props.paused) draw()
 }
 
 function onPointerDown(event: PointerEvent) {
