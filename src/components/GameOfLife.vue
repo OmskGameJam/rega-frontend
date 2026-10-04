@@ -12,6 +12,7 @@ const EMPTY = 0
 const LIFE = 1
 const SAND = 2
 const WALL = 3
+const CHUNK_SIZE = 32
 
 let columns = 0
 let rows = 0
@@ -32,8 +33,26 @@ let preferLeft = true
 let emitterX: number | null = null
 let emitterWait = 0
 let logoPixels: ImageData | null = null
+let chunkColumns = 0
+let chunkRows = 0
+let activeChunks = new Uint8Array()
+let nextActiveChunks = new Uint8Array()
+let stroke: { pointerId: number; material: typeof LIFE | typeof SAND; erase: boolean } | null = null
+
+function wakeChunk(chunks: Uint8Array, chunkX: number, chunkY: number) {
+  for (let y = Math.max(0, chunkY - 1); y <= Math.min(chunkRows - 1, chunkY + 1); y++) {
+    for (let x = Math.max(0, chunkX - 1); x <= Math.min(chunkColumns - 1, chunkX + 1); x++) {
+      chunks[y * chunkColumns + x] = 1
+    }
+  }
+}
+
+function wakeCell(x: number, y: number) {
+  wakeChunk(activeChunks, Math.floor(x / CHUNK_SIZE), Math.floor(y / CHUNK_SIZE))
+}
 
 function reset(randomFill: boolean) {
+  stroke = null
   emitterX = null
   emitterWait = 0
   lastTime = 0
@@ -45,6 +64,7 @@ function reset(randomFill: boolean) {
     cells.fill(EMPTY)
     nextCells.fill(EMPTY)
     projectWalls()
+    activeChunks.fill(0)
   }
   context?.clearRect(0, 0, canvasRef.value?.width ?? 0, HEIGHT)
   draw()
@@ -135,7 +155,10 @@ function updateEmitter(delta: number) {
 
   // The emitter moves in canvas pixels; sand uses the existing cell grid.
   const index = Math.min(columns - 1, Math.floor(emitterX / CELL_SIZE))
-  if (cells[index] === EMPTY) cells[index] = SAND
+  if (cells[index] === EMPTY) {
+    cells[index] = SAND
+    wakeCell(index, 0)
+  }
 }
 
 function seedLife() {
@@ -145,6 +168,7 @@ function seedLife() {
     cells[i] = Math.random() < 0.3 ? LIFE : EMPTY
   }
   projectWalls()
+  activeChunks.fill(1)
 }
 
 function resize(width: number) {
@@ -161,6 +185,10 @@ function resize(width: number) {
   if (newColumns !== columns || newRows !== rows) {
     columns = newColumns
     rows = newRows
+    chunkColumns = Math.ceil(columns / CHUNK_SIZE)
+    chunkRows = Math.ceil(rows / CHUNK_SIZE)
+    activeChunks = new Uint8Array(chunkColumns * chunkRows)
+    nextActiveChunks = new Uint8Array(activeChunks.length)
     // Empty border rows remove edge checks from the neighbor-counting pass.
     lifeRowSums = new Uint8Array((rows + 2) * columns)
     processedSand = new Uint8Array(columns * rows)
@@ -227,7 +255,7 @@ function pushSand(source: number): boolean {
   return true
 }
 
-function step() {
+function stepFullGrid() {
   // Cache horizontal triples once instead of visiting all eight neighbors per cell.
   for (let y = 0; y < rows; y++) {
     const row = y * columns
@@ -304,6 +332,153 @@ function step() {
   nextCells = previousCells
 }
 
+function step() {
+  // Avoid chunk traversal overhead while the entire grid is active.
+  if (!activeChunks.includes(0)) {
+    stepFullGrid()
+    updateChunkActivity()
+    return
+  }
+
+  // Sleeping chunks have unchanged Life/empty/wall cells and no sand. Copying
+  // preserves their stable state and prevents old buffer contents reappearing.
+  nextCells.set(cells)
+
+  // Cache horizontal triples for active chunks, including their source row halo.
+  for (let chunkY = 0; chunkY < chunkRows; chunkY++) {
+    const firstY = Math.max(0, chunkY * CHUNK_SIZE - 1)
+    const lastY = Math.min(rows, (chunkY + 1) * CHUNK_SIZE + 1)
+    for (let chunkX = 0; chunkX < chunkColumns; chunkX++) {
+      if (!activeChunks[chunkY * chunkColumns + chunkX]) continue
+      const firstX = chunkX * CHUNK_SIZE
+      const lastX = Math.min(columns, firstX + CHUNK_SIZE)
+      for (let y = firstY; y < lastY; y++) {
+        const row = y * columns
+        const sumsRow = row + columns
+        let left = Number(firstX > 0 && cells[row + firstX - 1] === LIFE)
+        let center = Number(cells[row + firstX] === LIFE)
+        for (let x = firstX; x < lastX; x++) {
+          const right = Number(x + 1 < columns && cells[row + x + 1] === LIFE)
+          lifeRowSums[sumsRow + x] = left + center + right
+          left = center
+          center = right
+        }
+      }
+    }
+  }
+
+  // Compute Life first. A birth can replace sand, which is displaced below.
+  for (let y = 0; y < rows; y++) {
+    const row = y * columns
+    const chunkRow = Math.floor(y / CHUNK_SIZE) * chunkColumns
+    for (let chunkX = 0; chunkX < chunkColumns; chunkX++) {
+      if (!activeChunks[chunkRow + chunkX]) continue
+      const lastX = Math.min(columns, (chunkX + 1) * CHUNK_SIZE)
+      for (let x = chunkX * CHUNK_SIZE; x < lastX; x++) {
+        const i = row + x
+        if (cells[i] === WALL) continue
+        const alive = Number(cells[i] === LIFE)
+        const neighbors = lifeRowSums[i] + lifeRowSums[i + columns]
+          + lifeRowSums[i + 2 * columns] - alive
+        nextCells[i] = neighbors === 3 || (alive && neighbors === 2) ? LIFE : EMPTY
+      }
+    }
+  }
+
+  processedSand.fill(0)
+  // Keep the original row-major order, even across chunk boundaries.
+  for (let y = 0; y < rows; y++) {
+    const row = y * columns
+    const chunkRow = Math.floor(y / CHUNK_SIZE) * chunkColumns
+    for (let chunkX = 0; chunkX < chunkColumns; chunkX++) {
+      if (!activeChunks[chunkRow + chunkX]) continue
+      const lastX = Math.min(columns, (chunkX + 1) * CHUNK_SIZE)
+      for (let x = chunkX * CHUNK_SIZE; x < lastX; x++) {
+        const i = row + x
+        if (cells[i] === SAND && nextCells[i] === LIFE) {
+          processedSand[i] = 1
+          pushSand(i)
+        }
+      }
+    }
+  }
+
+  preferLeft = !preferLeft
+
+  // Move sand bottom-up. When blocked, try both diagonals to form slopes.
+  for (let y = rows - 1; y >= 0; y--) {
+    const chunkRow = Math.floor(y / CHUNK_SIZE) * chunkColumns
+    for (let chunkX = 0; chunkX < chunkColumns; chunkX++) {
+      if (!activeChunks[chunkRow + chunkX]) continue
+      const lastX = Math.min(columns, (chunkX + 1) * CHUNK_SIZE)
+      for (let x = chunkX * CHUNK_SIZE; x < lastX; x++) {
+        const index = y * columns + x
+        if (cells[index] !== SAND || processedSand[index] || nextCells[index] === LIFE) continue
+
+        if (y === rows - 1) continue // Sand leaves the canvas at the bottom.
+
+        const below = index + columns
+        if (nextCells[below] === EMPTY) {
+          nextCells[below] = SAND
+        } else {
+          const firstDiagonal = preferLeft && x > 0
+            ? index + columns - 1
+            : !preferLeft && x + 1 < columns
+              ? index + columns + 1
+              : -1
+          const secondDiagonal = preferLeft && x + 1 < columns
+            ? index + columns + 1
+            : !preferLeft && x > 0
+              ? index + columns - 1
+              : -1
+
+          if (firstDiagonal >= 0 && nextCells[firstDiagonal] === EMPTY) {
+            nextCells[firstDiagonal] = SAND
+          } else if (secondDiagonal >= 0 && nextCells[secondDiagonal] === EMPTY) {
+            nextCells[secondDiagonal] = SAND
+          } else {
+            nextCells[index] = SAND
+          }
+        }
+      }
+    }
+  }
+
+  const previousCells = cells
+  cells = nextCells
+  nextCells = previousCells
+  updateChunkActivity()
+}
+
+function updateChunkActivity() {
+  // Unchanged Life chunks sleep until a neighboring chunk changes. Sand chunks
+  // stay awake in both diagonal phases, including every possible push path.
+  nextActiveChunks.fill(0)
+  for (let chunkY = 0; chunkY < chunkRows; chunkY++) {
+    const lastY = Math.min(rows, (chunkY + 1) * CHUNK_SIZE)
+    for (let chunkX = 0; chunkX < chunkColumns; chunkX++) {
+      if (!activeChunks[chunkY * chunkColumns + chunkX]) continue
+      const lastX = Math.min(columns, (chunkX + 1) * CHUNK_SIZE)
+      let needsNextTick = false
+      for (let y = chunkY * CHUNK_SIZE; y < lastY && !needsNextTick; y++) {
+        const row = y * columns
+        for (let x = chunkX * CHUNK_SIZE; x < lastX; x++) {
+          const i = row + x
+          if (cells[i] === SAND || cells[i] !== nextCells[i]) {
+            needsNextTick = true
+            break
+          }
+        }
+      }
+      if (needsNextTick) wakeChunk(nextActiveChunks, chunkX, chunkY)
+    }
+  }
+
+  const previousActiveChunks = activeChunks
+  activeChunks = nextActiveChunks
+  nextActiveChunks = previousActiveChunks
+}
+
 function draw() {
   if (!context || !canvasRef.value) return
 
@@ -329,31 +504,48 @@ function draw() {
   if (emitterX !== null) context.fillRect(emitterX, 0, 1, 1)
 }
 
-function place(event: PointerEvent, material: typeof LIFE | typeof SAND) {
+function pointerCell(event: PointerEvent): number {
   const canvas = canvasRef.value
-  if (!canvas) return
+  if (!canvas) return -1
   const rect = canvas.getBoundingClientRect()
   const x = Math.floor((event.clientX - rect.left) * canvas.width / rect.width / CELL_SIZE)
   const y = Math.floor((event.clientY - rect.top) * canvas.height / rect.height / CELL_SIZE)
-  if (x < 0 || x >= columns || y < 0 || y >= rows) return
+  if (x < 0 || x >= columns || y < 0 || y >= rows) return -1
+  return y * columns + x
+}
 
-  const index = y * columns + x
-  if (cells[index] !== EMPTY) return
-  cells[index] = material
+function place(event: PointerEvent, material: typeof LIFE | typeof SAND, erase: boolean) {
+  const index = pointerCell(event)
+  if (index < 0 || cells[index] === WALL) return
+  if (erase && cells[index] !== material) return
+  const replacement = erase ? EMPTY : material
+  if (cells[index] === replacement) return
+  cells[index] = replacement
+  wakeCell(index % columns, Math.floor(index / columns))
   if (props.paused) draw()
 }
 
 function onPointerDown(event: PointerEvent) {
   if (event.button !== 0 && event.button !== 2) return
   event.preventDefault()
+  const index = pointerCell(event)
+  if (index < 0) return
+  const material = event.button === 0 ? SAND : LIFE
+  stroke = { pointerId: event.pointerId, material, erase: cells[index] === material }
   const canvas = event.currentTarget as HTMLCanvasElement
   canvas.setPointerCapture(event.pointerId)
-  place(event, event.button === 0 ? SAND : LIFE)
+  place(event, stroke.material, stroke.erase)
 }
 
 function onPointerMove(event: PointerEvent) {
-  if (event.buttons & 1) place(event, SAND)
-  else if (event.buttons & 2) place(event, LIFE)
+  if (!stroke || stroke.pointerId !== event.pointerId) return
+  const button = stroke.material === SAND ? 1 : 2
+  if (event.buttons & button) place(event, stroke.material, stroke.erase)
+  else stroke = null
+}
+
+function endStroke(event: PointerEvent) {
+  if (stroke?.pointerId === event.pointerId) stroke = null
 }
 
 function animate(time: number) {
@@ -420,6 +612,9 @@ onBeforeUnmount(() => {
     style="width: 100%; height: 512px; display: block; touch-action: none;"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
+    @pointerup="endStroke"
+    @pointercancel="endStroke"
+    @lostpointercapture="endStroke"
     @contextmenu.prevent
   />
 </template>

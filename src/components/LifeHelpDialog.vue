@@ -64,6 +64,7 @@ defineExpose({ open })
         <hr />
         <p>Left click and drag to draw sand.</p>
         <p>Right click and drag to draw life.</p>
+        <p>Drawing replaces the other material. Start on the same material to erase it.</p>
         <p>Use the play/pause button to stop or resume the simulation.</p>
         <div class="life-help-actions">
           <Button
