@@ -26,14 +26,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseInput
-    ref="inputRef"
-    :model-value="modelValue"
-    :placeholder="placeholder"
-    :max-length="maxLength"
-    :extra-styles="extraStyles"
-    show-emoji-button
-    @update:model-value="emit('update:modelValue', $event)"
-    @keydown.enter="emit('enter')"
-  />
+  <div style="display: contents" @keydown.enter.stop.prevent="emit('enter')">
+    <BaseInput
+      ref="inputRef"
+      :model-value="modelValue"
+      :placeholder="placeholder"
+      :max-length="maxLength"
+      :extra-styles="extraStyles"
+      show-emoji-button
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+  </div>
 </template>
