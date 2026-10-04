@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box, NamedPanel, Typography, Window } from 'win-55-ui-vue'
+import { Box, NamedPanel, Typography, Window, cursorDirective as vCursor } from 'win-55-ui-vue'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker } from 'vue-yandex-maps'
 import IntGrid from '../components/IntGrid.vue';
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint';
@@ -43,7 +43,7 @@ onMounted(() => {
           Омский Игровой Хакатон 17&NoBreak;-&NoBreak;18&NoBreak; &NoBreak;октября&NoBreak;!
         </Typography>
       </IntGrid>
-      <Box type="textarea" :extra-styles="{padding: '24px'}">
+      <Box v-cursor="'text'" type="textarea" :extra-styles="{padding: '24px'}">
         <p>
           <Typography shorthand="Bold12">
             Омский Ludum Dare
@@ -108,7 +108,7 @@ onMounted(() => {
           </Typography>
         </NamedPanel>
       </div>
-      <Box type="indent" :extra-styles="{margin: '8px'}">
+      <Box v-cursor="'crosshair'" type="indent" :extra-styles="{margin: '8px'}">
         <YandexMap
           :settings="{ location: { center: [73.387463, 54.985395], zoom: 17 }, behaviors: [ 'drag', 'pinchZoom' ] }"
           style="height: 300px"
@@ -136,7 +136,7 @@ onMounted(() => {
     </Box>
     <RegBtn />
     <Window icon="/icons/ogd.png" faux title="Контакты">
-      <Box type="textarea" :extra-styles="{padding: '24px'}">
+      <Box v-cursor="'text'" type="textarea" :extra-styles="{padding: '24px'}">
         <div class="contact">
           <div style="flex-grow: 1;">
             Чат в Телеграме: <a target="_blank" href="https://t.me/omsky_gamedev">t.me/omsky_gamedev</a>

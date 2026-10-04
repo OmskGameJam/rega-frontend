@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<tileset name="Halloface trees" tilewidth="32" tileheight="32" tilecount="7" columns="7"><image source="halloface-tree-assemblies.png" width="224" height="32" /></tileset>

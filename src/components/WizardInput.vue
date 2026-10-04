@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type CSSProperties } from 'vue'
-import { BaseInput } from 'win-55-ui-vue'
+import { BaseInput, RichInput } from 'win-55-ui-vue'
 
 withDefaults(defineProps<{
   modelValue: string
@@ -27,7 +27,7 @@ onMounted(() => {
 
 <template>
   <div style="display: contents" @keydown.enter.stop.prevent="emit('enter')">
-    <BaseInput
+    <RichInput
       ref="inputRef"
       :model-value="modelValue"
       :placeholder="placeholder"

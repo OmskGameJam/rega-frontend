@@ -1,0 +1,111 @@
+{
+  "size": [
+    4800,
+    2416
+  ],
+  "tile_size": 16,
+  "extracted_tiles": 228,
+  "reference_tiles": 45300,
+  "exact_thumbnail_matches": 44430,
+  "nearest_thumbnail_matches": 870,
+  "sampling_phase": [
+    3,
+    3
+  ],
+  "tree_assemblies": 7,
+  "tree_placements": [
+    [
+      1904,
+      672
+    ],
+    [
+      1856,
+      704
+    ],
+    [
+      1792,
+      720
+    ],
+    [
+      1648,
+      736
+    ],
+    [
+      1744,
+      736
+    ],
+    [
+      1840,
+      752
+    ],
+    [
+      1776,
+      768
+    ],
+    [
+      1648,
+      800
+    ],
+    [
+      1712,
+      832
+    ],
+    [
+      2192,
+      864
+    ],
+    [
+      2752,
+      880
+    ],
+    [
+      2144,
+      960
+    ],
+    [
+      2864,
+      960
+    ],
+    [
+      1856,
+      1472
+    ]
+  ],
+  "glitch_areas": [
+    {
+      "landmark": "tree grove",
+      "x": 1680,
+      "y": 912,
+      "width": 96,
+      "height": 80
+    },
+    {
+      "landmark": "statue island",
+      "x": 2608,
+      "y": 1008,
+      "width": 96,
+      "height": 80
+    },
+    {
+      "landmark": "castle",
+      "x": 3136,
+      "y": 1008,
+      "width": 96,
+      "height": 80
+    },
+    {
+      "landmark": "house",
+      "x": 1920,
+      "y": 1472,
+      "width": 96,
+      "height": 80
+    },
+    {
+      "landmark": "fenced field",
+      "x": 1904,
+      "y": 1648,
+      "width": 96,
+      "height": 80
+    }
+  ]
+}

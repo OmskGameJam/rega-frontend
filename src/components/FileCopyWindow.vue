@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { Box, Typography } from 'win-55-ui-vue'
+import { Box, Typography, cursorDirective as vCursor } from 'win-55-ui-vue'
 
 const props = withDefaults(defineProps<{
   currentStep: number
@@ -196,7 +196,7 @@ const displayPath = computed(() => {
 </script>
 
 <template>
-  <div class="file-copy-anchor">
+  <div v-cursor="currentStep < totalSteps ? 'progress' : 'default'" class="file-copy-anchor">
     <Typography font-color="black">
       <Box type="panel-d-1" :extra-styles="{ width: '420px', padding: '12px 16px' }">
         <Typography shorthand="Bold12" font-color="black">
@@ -209,7 +209,7 @@ const displayPath = computed(() => {
             {{ displayPath }}
           </Typography>
         </div>
-        <div class="progress-track">
+        <div class="progress-track" role="progressbar" aria-label="Шаг регистрации" :aria-valuenow="currentStep" :aria-valuemax="totalSteps" :aria-valuemin="0">
           <div
             v-for="i in filledChunks"
             :key="i"
