@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box } from 'win-55-ui-vue'
+import { Box, cursorDirective as vCursor } from 'win-55-ui-vue'
 import Pipes from './Pipes.vue';
 
 defineProps<{ breakpoint: number }>()
@@ -8,7 +8,7 @@ defineProps<{ breakpoint: number }>()
 <template>
   <Box type="indent-dark" extra-class="logo-container" :extra-styles="{width: breakpoint}">
     <router-link to="/">
-      <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
+      <img v-cursor="'link'" class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
     </router-link>
     <Pipes />
   </Box>

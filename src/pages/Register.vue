@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window, RichText } from 'win-55-ui-vue'
-import WizardInput from '../components/WizardInput.vue'
+import { Box, Button, Typography, RadioButton, Checkbox, HDivider, Window, RichText, RichInput, cursorDirective as vCursor, useCursorContext } from 'win-55-ui-vue'
 import FileCopyWindow from '../components/FileCopyWindow.vue'
-import BaseTextarea from '../components/BaseTextarea.vue'
 import { globalAxios } from '../net/axios'
 import { YM_COUNTER } from '../helpers/constants'
 import { useResponsiveBreakpoint } from '../composable/useResponsiveBreakpoint'
+import { useCursorActivity } from '../composable/useCursorActivity'
 import AudioButton from '../components/AudioButton.vue'
 import { EVENT_NOW } from '../constants'
 import { customEmojiDirective as vEmoji } from 'win-55-ui-vue'
@@ -34,9 +33,48 @@ const isMobile = computed(() => viewportWidth.value < 760)
 const TOTAL_STEPS = 10
 
 const currentStep = ref(0)
+const openingPhase = ref<'transition' | 'waiting' | 'ready'>('transition')
+const isOpening = computed(() => openingPhase.value !== 'ready')
+const isWaiting = computed(() => openingPhase.value === 'waiting')
+useCursorActivity(isWaiting, 'busy')
+let openingTimer: ReturnType<typeof setTimeout> | undefined
+const showProgressWindow = ref(false)
+let progressWindowTimer: ReturnType<typeof setTimeout> | undefined
+
+function startOpeningWait() {
+  if (openingPhase.value !== 'transition') return
+
+  openingPhase.value = 'waiting'
+  openingTimer = setTimeout(() => {
+    openingPhase.value = 'ready'
+    progressWindowTimer = setTimeout(() => {
+      showProgressWindow.value = true
+    }, 300 + Math.floor(Math.random() * 701))
+  }, 1000 + Math.floor(Math.random() * 2001))
+}
+
+onBeforeUnmount(() => {
+  clearTimeout(openingTimer)
+  clearTimeout(progressWindowTimer)
+})
+
 const isSubmitting = ref(false)
+useCursorActivity(isSubmitting, 'busy')
+const cursor = useCursorContext()
+const titleCursor = computed(() => cursor?.resolveRoleCss(isSubmitting.value ? 'wait' : 'move'))
 const submitError = ref('')
 const submitSuccess = ref(false)
+const inputRef = ref<InstanceType<typeof RichInput> | null>(null)
+
+watch(inputRef, input => input?.el?.focus(), { flush: 'post' })
+
+function onInputKeydown(event: KeyboardEvent) {
+  if (event.target !== inputRef.value?.el || event.isComposing || currentStep.value === 4) return
+
+  event.preventDefault()
+  event.stopPropagation()
+  goNext()
+}
 
 const windowX = ref(100)
 const windowY = ref(50)
@@ -180,16 +218,18 @@ function goToTeams() {
 </script>
 
 <template>
-  <div class="rega-bg" />
-  <div v-emoji class="wizard-overlay">
+  <div class="rega-bg" @animationend.self="startOpeningWait" />
+  <div v-if="!isOpening" v-emoji class="wizard-overlay">
     <Typography font-color="black">
-      <FileCopyWindow :current-step="currentStep" :total-steps="TOTAL_STEPS" />
+      <FileCopyWindow v-if="showProgressWindow" :current-step="currentStep" :total-steps="TOTAL_STEPS" />
       <Window
         v-model:x="windowX"
         v-model:y="windowY"
         :width="windowWidth"
         :height="windowHeight"
         :faux="isMobile"
+        :class="{ 'wizard-draggable': !isMobile }"
+        :style="{ '--wizard-title-cursor': titleCursor }"
         icon="/icons/rega.png"
         title="Регистрация"
         :extra-styles="{ overflow: 'hidden', display: 'flex', flexDirection: 'column', ...(isMobile ? { left: '0px', top: '0px' } : {}) }"
@@ -202,7 +242,7 @@ function goToTeams() {
             <img :src="sidebarImage" class="wizard-sidebar-image" draggable="false" />
           </div>
 
-          <div class="wizard-main">
+          <div class="wizard-main" :aria-busy="isSubmitting" @keydown.enter="onInputKeydown">
             <div v-if="isMobile" class="wizard-mobile-image-wrap">
               <img :src="sidebarImage" class="wizard-mobile-image" draggable="false">
             </div>
@@ -232,11 +272,12 @@ function goToTeams() {
               <p class="wizard-hint">
                 Например, &laquo;Зайчики-попрыгайчики&raquo; или &laquo;Новая команда (1)&raquo;
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.name"
+                show-emoji-button
                 placeholder="Новая команда (2)"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -248,11 +289,12 @@ function goToTeams() {
               <p class="wizard-hint">
                 Не важно, много его у вас или мало, нам просто интересно :)
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.exp"
+                show-emoji-button
                 placeholder="0-3 года"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -264,11 +306,12 @@ function goToTeams() {
               <p class="wizard-hint">
                 ВКонтакте, Телеграм, Мой Мир Mail.RU, в какое окно кидать камень
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.contact"
+                show-emoji-button
                 placeholder="телеграм: @oleg_gaming"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -280,8 +323,11 @@ function goToTeams() {
               <p class="wizard-hint">
                 Кто вы, что вы делаете, всё что угодно
               </p>
-              <BaseTextarea
+              <RichInput
+                ref="inputRef"
                 v-model="formData.members"
+                multiline
+                show-emoji-button
                 placeholder="Мы - Новая Команда, с нами: Олег - разработчик, Олег (1) - дизайнер"
                 :max-length="400"
                 :extra-styles="{ width: '100%', marginTop: '12px', height: '160px' }"
@@ -323,11 +369,12 @@ function goToTeams() {
               <p class="wizard-hint">
                 Unity? Godot? Свой движок, или что-то совсем серьёзное?
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.tech"
+                show-emoji-button
                 placeholder="Unreal Bomjine 2"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -339,12 +386,13 @@ function goToTeams() {
               <p class="wizard-hint">
                 Читать литературу? Разминаться? Спать?
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.prepare"
+                show-emoji-button
                 placeholder="Прочитаю мангу про бетон и лягу спать в 7 утра"
                 :max-length="128"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -356,12 +404,13 @@ function goToTeams() {
               <p class="wizard-hint">
                 Пейте водичку и ложитесь спать вовремя!
               </p>
-              <WizardInput
+              <RichInput
+                ref="inputRef"
                 v-model="formData.advice"
+                show-emoji-button
                 placeholder="Да"
                 :max-length="128"
                 :extra-styles="{ width: '100%', marginTop: '12px' }"
-                @enter="goNext"
               />
             </template>
 
@@ -426,13 +475,14 @@ function goToTeams() {
               </p>
               <Box
                 type="textarea"
-                :extra-styles="{ width: '100%', marginTop: '12px', padding: '4px', height: 'calc(1.4em * 8)', overflowY: 'auto' }"
+                overflow="auto"
+                :extra-styles="{ width: '100%', marginTop: '12px', padding: '4px', height: 'calc(1.4em * 8)', whiteSpace: 'pre-wrap' }"
               >
                 <RichText allow-links allow-sizes>
-                  {{summaryText}}
+                  {{ summaryText }}
                 </RichText>
               </Box>
-              <p v-if="submitError" class="wizard-error">
+              <p v-if="submitError" class="wizard-error" role="alert">
                 {{ submitError }}
               </p>
             </template>
@@ -467,35 +517,16 @@ function goToTeams() {
             </Button>
 
             <div class="wizard-footer-nav">
-              <span
-                :style="{
-                  opacity: currentStep === 0 ? 0.5 : 1,
-                  pointerEvents: currentStep === 0 ? 'none' : 'auto',
-                }"
-              >
-                <Button @click="goBack">&lt; Назад</Button>
-              </span>
+              <Button :disabled="currentStep === 0 || isSubmitting" @click="goBack">
+                &lt; Назад
+              </Button>
 
-              <template v-if="currentStep < TOTAL_STEPS">
-                <span
-                  :style="{
-                    opacity: canGoNext ? 1 : 0.5,
-                    pointerEvents: canGoNext ? 'auto' : 'none',
-                  }"
-                >
-                  <Button @click="goNext">Далее &gt;</Button>
-                </span>
-              </template>
-              <template v-else>
-                <span
-                  :style="{
-                    opacity: isSubmitting ? 0.5 : 1,
-                    pointerEvents: isSubmitting ? 'none' : 'auto',
-                  }"
-                >
-                  <Button @click="submit">Готово</Button>
-                </span>
-              </template>
+              <Button v-if="currentStep < TOTAL_STEPS" :disabled="!canGoNext" @click="goNext">
+                Далее &gt;
+              </Button>
+              <Button v-else v-cursor="isSubmitting ? 'wait' : 'link'" :disabled="isSubmitting" @click="submit">
+                {{ isSubmitting ? 'Отправка...' : 'Готово' }}
+              </Button>
 
               <template v-if="!isMobile">
                 <div style="width: 24px" />
@@ -512,6 +543,10 @@ function goToTeams() {
 </template>
 
 <style scoped>
+.wizard-draggable :deep(.titlebar-text) {
+  --win55-cursor-native: var(--wizard-title-cursor);
+}
+
 .wizard-overlay {
   position: fixed;
   inset: 0;
@@ -578,22 +613,6 @@ function goToTeams() {
 .wizard-summary-note {
   margin-top: 12px;
   opacity: 0.6;
-}
-
-.wizard-summary-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  resize: none;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  cursor: default;
-  font-family: 'Regular12', Arial, sans-serif;
-  font-size: 24px;
-  color: black;
-  line-height: 1.4;
 }
 
 .wizard-footer {

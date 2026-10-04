@@ -25,13 +25,13 @@
         <h3>Global</h3>
 
         <label>Perspective {{ settings.perspective }}</label>
-        <input v-model.number="settings.perspective" type="range" min="100" max="2000" />
+        <input v-model.number="settings.perspective" v-cursor="'ew-resize'" type="range" min="100" max="2000" />
 
         <label>Camera RotateZ {{ settings.cameraRotateZ }}</label>
-        <input v-model.number="settings.cameraRotateZ" type="range" min="-180" max="180" />
+        <input v-model.number="settings.cameraRotateZ" v-cursor="'ew-resize'" type="range" min="-180" max="180" />
 
         <label>Global Scale {{ settings.scale }}</label>
-        <input v-model.number="settings.scale" type="range" min="0.1" max="3" step="0.1" />
+        <input v-model.number="settings.scale" v-cursor="'ew-resize'" type="range" min="0.1" max="3" step="0.1" />
 
         <hr />
 
@@ -39,22 +39,22 @@
           <h4>{{ layer.id }}</h4>
 
           <label>SpeedX {{ layer.speedX }}</label>
-          <input v-model.number="layer.speedX" type="range" min="-300" max="300" />
+          <input v-model.number="layer.speedX" v-cursor="'ew-resize'" type="range" min="-300" max="300" />
 
           <label>SpeedY {{ layer.speedY }}</label>
-          <input v-model.number="layer.speedY" type="range" min="-300" max="300" />
+          <input v-model.number="layer.speedY" v-cursor="'ew-resize'" type="range" min="-300" max="300" />
 
           <label>Z {{ layer.z }}</label>
-          <input v-model.number="layer.z" type="range" min="-2000" max="2000" />
+          <input v-model.number="layer.z" v-cursor="'ew-resize'" type="range" min="-2000" max="2000" />
 
           <label>RotateX {{ layer.rotation }}</label>
-          <input v-model.number="layer.rotation" type="range" min="0" max="90" />
+          <input v-model.number="layer.rotation" v-cursor="'ew-resize'" type="range" min="0" max="90" />
 
           <label>RotateZ {{ layer.rotateZ }}</label>
-          <input v-model.number="layer.rotateZ" type="range" min="-180" max="180" />
+          <input v-model.number="layer.rotateZ" v-cursor="'ew-resize'" type="range" min="-180" max="180" />
 
           <label>Scale {{ layer.scale }}</label>
-          <input v-model.number="layer.scale" type="range" min="0.1" max="3" step="0.1" />
+          <input v-model.number="layer.scale" v-cursor="'ew-resize'" type="range" min="0.1" max="3" step="0.1" />
         </div>
       </div>
     </Window>
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { reactive, onMounted, computed, ref } from "vue"
-import { Button, Window } from "win-55-ui-vue"
+import { Button, Window, cursorDirective as vCursor } from "win-55-ui-vue"
 
 type Layer = {
   id: string
@@ -95,7 +95,7 @@ const settings = reactive({
 const layers = reactive<Layer[]>([
   {
     id: "ground",
-    image: "/the-big-one.png",
+    image: "/halloface-extended-downscaled.png",
     width: 1200,
     height: 604,
     offsetX: 0,
@@ -123,7 +123,7 @@ const layers = reactive<Layer[]>([
   },
   {
     id: "clouds",
-    image: "/clouds.png",
+    image: "/minecraft-clouds.png",
     width: 1024,
     height: 1024,
     offsetX: 0,

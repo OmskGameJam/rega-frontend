@@ -1,3 +1,18 @@
+# UI dependency updates
+
+`win-55-ui-vue` follows the default branch of
+[`OmskGameJam/win-55-ui`](https://github.com/OmskGameJam/win-55-ui).
+To install the latest upstream commit and refresh `package-lock.json`, run:
+
+```sh
+npm run update:ui
+```
+
+Commit the updated lockfile so other installations use the same version.
+`npm install` and `npm ci` use the locked commit; they do not automatically
+fetch new commits when a valid lockfile is present. The commit hash in the
+lockfile is expected and does not pin the dependency in `package.json`.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -7,6 +7,11 @@
 
   </div> -->
   <Button 
+    v-cursor="isLoading ? 'progress' : 'link'"
+    :aria-busy="isLoading"
+    :aria-pressed="isPlaying"
+    :aria-label="isPlaying ? 'Выключить музыку' : 'Включить музыку'"
+    :title="isPlaying ? 'Выключить музыку' : 'Включить музыку'"
     extra-class="titlebar-button" 
     base-type="panel-d-2"
     @click="toggle"
@@ -21,12 +26,14 @@
     @canplay="onCanPlay"
     @playing="onPlaying"
     @pause="onPause"
+    @waiting="isLoading = true"
+    @error="onError"
   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Button } from 'win-55-ui-vue';
+import { Button, cursorDirective as vCursor } from 'win-55-ui-vue';
 
 defineProps<{
   src: string;
@@ -48,10 +55,16 @@ function onPlaying() {
 
 function onPause() {
   isPlaying.value = false;
+  isLoading.value = false;
+}
+
+function onError() {
+  isLoading.value = false;
+  isPlaying.value = false;
 }
 
 async function toggle() {
-  if (!audio.value) return;
+  if (!audio.value || (isLoading.value && !isPlaying.value)) return;
 
   if (isPlaying.value) {
     audio.value.pause();
