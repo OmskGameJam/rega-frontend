@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { Box } from 'win-55-ui-vue'
-import Pipes from './Pipes.vue';
+import Pipes from './Pipes.vue'
+import GameOfLife from './GameOfLife.vue'
 
-defineProps<{ breakpoint: number }>()
+defineProps<{
+  breakpoint: number
+  screensaver: 'pipes' | 'life'
+  paused: boolean
+}>()
 </script>
 
 <template>
@@ -10,7 +15,8 @@ defineProps<{ breakpoint: number }>()
     <router-link to="/">
       <img class="logo" :src="breakpoint > 750 ? '/old-long.png' : '/old-short.png'" />
     </router-link>
-    <Pipes />
+    <Pipes v-if="screensaver === 'pipes'" />
+    <GameOfLife v-else :paused="paused" />
   </Box>
 </template>
 
