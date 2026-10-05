@@ -11,7 +11,7 @@ const windowWidth = ref(460)
 async function open() {
   if (isOpen.value) return
 
-  windowWidth.value = Math.max(1, Math.min(460, window.innerWidth - 24))
+  windowWidth.value = Math.max(1, Math.min(512, window.innerWidth - 24))
   windowX.value = Math.max(0, (window.innerWidth - windowWidth.value) / 2)
   windowY.value = 12
   isOpen.value = true
@@ -34,7 +34,7 @@ defineExpose({ open })
     v-model:x="windowX"
     v-model:y="windowY"
     :width="windowWidth"
-    title="About OgdLifeSand"
+    title="About OgdAgar"
     icon="/logo-sand.png"
     :extra-styles="{ position: 'fixed', height: 'auto', zIndex: 2147483647 }"
   >
@@ -56,7 +56,7 @@ defineExpose({ open })
           <img class="life-help-icon" draggable="false" src="/logo-sand.png" alt="" />
           <div>
             <h1>
-              OgdLifeSand
+              OgdAgar Halloween Edition v1.1
             </h1>
             <p>© 2026 Omsky Gamedev</p>
           </div>

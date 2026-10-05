@@ -56,16 +56,6 @@ onMounted(async () => {
             <img draggable="false" :src="paused ? '/x-buttons/play.png' : '/x-buttons/pause.png'" alt="" />
           </Button>
           <Button
-            v-cursor="'help'"
-            extra-class="titlebar-button"
-            base-type="panel-d-2"
-            aria-label="Справка"
-            title="Справка"
-            @click="helpDialog?.open()"
-          >
-            <img draggable="false" src="/x-buttons/help.png" alt="" />
-          </Button>
-          <Button
             v-cursor="'link'"
             extra-class="titlebar-button"
             base-type="panel-d-2"
@@ -84,6 +74,15 @@ onMounted(async () => {
             @click="logoBox?.clear()"
           >
             <img draggable="false" :src="'/win-55-ui/window/x.png'" alt="" />
+          </Button><Button
+            v-cursor="'help'"
+            extra-class="titlebar-button"
+            base-type="panel-d-2"
+            aria-label="Справка"
+            title="Справка"
+            @click="helpDialog?.open()"
+          >
+            <img draggable="false" src="/x-buttons/help.png" alt="" />
           </Button>
         </template>
         <LogoBoxOLD ref="logoBox" :breakpoint="breakpoint" :screensaver="screensaver" :paused="paused" />

@@ -1,18 +1,46 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Emoji } from 'win-55-ui-vue'
+import { BOID_EMOJI_SIZE, BOID_SIZE, createBoidEntrance, stepBoids, type Boid } from '../helpers/boids'
+import { createPerlinNoise } from '../helpers/perlin'
 
 const props = defineProps<{ paused: boolean; logoImage?: HTMLImageElement | null }>()
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
+const backgroundImage = ref('')
+const boids = ref<Boid[]>([])
+const emitterCursors = ref<{ slot: number; x: number; opacity: number }[]>([])
+const emojiInset = Math.floor((BOID_SIZE - BOID_EMOJI_SIZE) / 2)
 const CELL_SIZE = 6
 const HEIGHT = 512
+const BACKGROUND_ROWS = Math.ceil(HEIGHT / CELL_SIZE)
+const BACKGROUND_LEVELS = 5
+const BACKGROUND_COLORS = Array.from({ length: BACKGROUND_LEVELS }, (_, level) => {
+  const blue = Math.round(0x44 * (1 - level / (BACKGROUND_LEVELS - 1)))
+  return `#0000${blue.toString(16).padStart(2, '0')}`
+})
+const BAYER_4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
 const STEP_MS = 50
-const EMITTER_DELAY_MS = 5000
+const MAX_EMITTERS = 3
+const EMITTER_FADE_IN_MS = 500
+const EMITTER_FADE_OUT_MS = 500
+// The native sprite is 32px with its hotspot at (10, 10).
+const EMITTER_CURSOR_SRC = '/win-55-ui/cursors/windows-default-default/native.gif'
+const EMITTER_CURSOR_SIZE = 32
+const EMITTER_CURSOR_HOTSPOT = 10
+const EMITTER_SPAWN_MIN_MS = 3000
+const EMITTER_SPAWN_MAX_MS = 10000
+const EMITTER_LIFE_MIN_MS = 1000
+const EMITTER_LIFE_MAX_MS = 3000
+const EMITTER_SPEED_MIN = 40 // Canvas pixels per second.
+const EMITTER_SPEED_MAX = 180
 const EMPTY = 0
 const LIFE = 1
 const SAND = 2
 const WALL = 3
 const CHUNK_SIZE = 32
+const LIFE_NOISE_SCALE = 48 // Grid cells per Perlin lattice interval.
+const LIFE_NOISE_CUTOFF = 0.3 // Only noise above this value can spawn Life; probability remains the noise value.
 
 let columns = 0
 let rows = 0
@@ -29,9 +57,11 @@ let frameId = 0
 let resizeObserver: ResizeObserver | null = null
 let lastTime = 0
 let elapsed = 0
+let boidEntrance = createBoidEntrance()
 let preferLeft = true
-let emitterX: number | null = null
-let emitterWait = 0
+type SandEmitter = { x: number; velocity: number; remainingMs: number; fadeInMs: number; fadeOutMs: number }
+type EmitterSlot = { emitter: SandEmitter | null; waitMs: number }
+let emitterSlots: EmitterSlot[] = []
 let logoPixels: ImageData | null = null
 let chunkColumns = 0
 let chunkRows = 0
@@ -52,9 +82,10 @@ function wakeCell(x: number, y: number) {
 }
 
 function reset(randomFill: boolean) {
+  boids.value = []
+  boidEntrance = createBoidEntrance()
   stroke = null
-  emitterX = null
-  emitterWait = 0
+  resetEmitters()
   lastTime = 0
   elapsed = 0
   preferLeft = true
@@ -136,39 +167,129 @@ watch(() => props.logoImage, (logo, _previous, onCleanup) => {
   loadLogoPixels()
 }, { flush: 'post', immediate: true })
 
-function updateEmitter(delta: number) {
+function randomBetween(min: number, max: number) {
+  return min + Math.random() * (max - min)
+}
+
+function resetEmitters() {
+  emitterCursors.value = []
+  emitterSlots = Array.from({ length: MAX_EMITTERS }, () => ({
+    emitter: null,
+    waitMs: randomBetween(EMITTER_SPAWN_MIN_MS, EMITTER_SPAWN_MAX_MS),
+  }))
+}
+
+function updateEmitters(delta: number) {
   const canvas = canvasRef.value
   if (!canvas || !columns) return
 
-  if (emitterX === null) {
-    emitterWait += delta
-    if (emitterWait < EMITTER_DELAY_MS) return
-    emitterX = 0
-    emitterWait = 0
-  } else if (emitterX >= canvas.width - 1) {
-    emitterX = null
-    emitterWait = 0
-    return
-  } else {
-    emitterX++
-  }
+  const maxX = Math.max(0, canvas.width - 1)
+  for (const slot of emitterSlots) {
+    if (slot.emitter) {
+      if (slot.emitter.remainingMs <= 0) {
+        slot.emitter.fadeOutMs = Math.max(0, slot.emitter.fadeOutMs - delta)
+        if (slot.emitter.fadeOutMs === 0) {
+          slot.emitter = null
+          slot.waitMs = randomBetween(EMITTER_SPAWN_MIN_MS, EMITTER_SPAWN_MAX_MS)
+        }
+        continue
+      }
+      if (slot.emitter.fadeInMs > 0) {
+        slot.emitter.fadeInMs = Math.max(0, slot.emitter.fadeInMs - delta)
+        // Hold the cursor at the spawn point until its fade finishes.
+        if (slot.emitter.fadeInMs > 0) continue
+      } else {
+        slot.emitter.remainingMs -= delta
+        if (slot.emitter.remainingMs <= 0) {
+          continue
+        }
+        slot.emitter.x += slot.emitter.velocity * delta / 1000
+        // Bounce at the edges so every emitter gets its full lifetime.
+        if (slot.emitter.x < 0 || slot.emitter.x > maxX) {
+          slot.emitter.x = Math.max(0, Math.min(maxX, slot.emitter.x))
+          slot.emitter.velocity = -slot.emitter.velocity
+        }
+      }
+    } else {
+      slot.waitMs -= delta
+      if (slot.waitMs > 0) continue
+      // Averaging two samples favors the center while keeping the full width available.
+      const x = (Math.random() + Math.random()) / 2 * maxX
+      const speed = randomBetween(EMITTER_SPEED_MIN, EMITTER_SPEED_MAX)
+      let direction = Math.random() < 0.5 ? -1 : 1
+      // Give an outward direction one reroll, without forcing the result inward.
+      if ((x - maxX / 2) * direction > 0) {
+        direction = Math.random() < 0.5 ? -1 : 1
+      }
+      slot.emitter = {
+        x,
+        velocity: speed * direction,
+        remainingMs: randomBetween(EMITTER_LIFE_MIN_MS, EMITTER_LIFE_MAX_MS),
+        fadeInMs: EMITTER_FADE_IN_MS,
+        fadeOutMs: EMITTER_FADE_OUT_MS,
+      }
+      continue
+    }
 
-  // The emitter moves in canvas pixels; sand uses the existing cell grid.
-  const index = Math.min(columns - 1, Math.floor(emitterX / CELL_SIZE))
-  if (cells[index] === EMPTY) {
-    cells[index] = SAND
-    wakeCell(index, 0)
+    // One grain per active emitter per tick, independent of display FPS.
+    const index = Math.min(columns - 1, Math.floor(slot.emitter.x / CELL_SIZE))
+    if (cells[index] === EMPTY) {
+      cells[index] = SAND
+      wakeCell(index, 0)
+    }
   }
+  emitterCursors.value = emitterSlots.flatMap((slot, index) => slot.emitter ? [{
+    slot: index,
+    x: slot.emitter.x,
+    opacity: slot.emitter.remainingMs <= 0
+      ? slot.emitter.fadeOutMs / EMITTER_FADE_OUT_MS
+      : 1 - slot.emitter.fadeInMs / EMITTER_FADE_IN_MS,
+  }] : [])
 }
 
 function seedLife() {
+  resetEmitters()
+  boids.value = []
+  boidEntrance = createBoidEntrance()
   cells = new Uint8Array(columns * rows)
   nextCells = new Uint8Array(columns * rows)
-  for (let i = 0; i < cells.length; i++) {
-    cells[i] = Math.random() < 0.3 ? LIFE : EMPTY
+  const noise = createPerlinNoise()
+  const offsetX = Math.random() * 256
+  const offsetY = Math.random() * 256
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < columns; x++) {
+      const chance = noise(offsetX + x / LIFE_NOISE_SCALE, offsetY + y / LIFE_NOISE_SCALE)
+      cells[y * columns + x] = chance > LIFE_NOISE_CUTOFF && Math.random() < chance ? LIFE : EMPTY
+    }
   }
   projectWalls()
   activeChunks.fill(1)
+}
+
+function updateBoids() {
+  boids.value = stepBoids({ cells, columns, rows, cellSize: CELL_SIZE }, boids.value, boidEntrance, STEP_MS)
+}
+
+function createBackground(width: number) {
+  const layer = document.createElement('canvas')
+  layer.width = width
+  layer.height = HEIGHT
+  const layerContext = layer.getContext('2d')
+  if (!layerContext) return null
+
+  for (let y = 0; y < BACKGROUND_ROWS; y++) {
+    const level = y / (BACKGROUND_ROWS - 1) * (BACKGROUND_LEVELS - 1)
+    const lower = Math.floor(level)
+    // Leave solid bands around a dithered transition spanning 40% of each interval.
+    const blend = Math.max(0, Math.min(1, (level - lower - 0.3) / 0.4))
+    for (let x = 0; x < Math.ceil(width / CELL_SIZE); x++) {
+      const threshold = (BAYER_4[(y % 4) * 4 + x % 4] + 0.5) / 16
+      const color = Math.min(BACKGROUND_LEVELS - 1, lower + Number(blend > threshold))
+      layerContext.fillStyle = BACKGROUND_COLORS[color]
+      layerContext.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    }
+  }
+  return layer
 }
 
 function resize(width: number) {
@@ -179,6 +300,9 @@ function resize(width: number) {
   const widthChanged = canvas.width !== newWidth
   canvas.width = newWidth
   canvas.height = HEIGHT
+  if (!backgroundImage.value || widthChanged) {
+    backgroundImage.value = createBackground(newWidth)?.toDataURL('image/png') ?? ''
+  }
   const newColumns = Math.max(4, Math.floor(canvas.width / CELL_SIZE))
   const newRows = Math.floor(HEIGHT / CELL_SIZE)
 
@@ -501,7 +625,11 @@ function draw() {
       }
     }
   }
-  if (emitterX !== null) context.fillRect(emitterX, 0, 1, 1)
+  for (const slot of emitterSlots) {
+    if (slot.emitter && slot.emitter.fadeInMs === 0 && slot.emitter.remainingMs > 0) {
+      context.fillRect(Math.round(slot.emitter.x), 0, 1, 1)
+    }
+  }
 }
 
 function pointerCell(event: PointerEvent): number {
@@ -555,9 +683,10 @@ function animate(time: number) {
   elapsed += Math.min(delta, 250)
   lastTime = time
 
-  updateEmitter(delta)
   while (elapsed >= STEP_MS) {
+    updateEmitters(STEP_MS)
     step()
+    updateBoids()
     draw()
     elapsed -= STEP_MS
   }
@@ -607,14 +736,99 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <canvas
-    ref="canvasRef"
-    style="width: 100%; height: 512px; display: block; touch-action: none;"
-    @pointerdown="onPointerDown"
-    @pointermove="onPointerMove"
-    @pointerup="endStroke"
-    @pointercancel="endStroke"
-    @lostpointercapture="endStroke"
-    @contextmenu.prevent
-  />
+  <div class="life-world">
+    <canvas
+      ref="canvasRef"
+      style="width: 100%; height: 512px; display: block; touch-action: none;"
+      @pointerdown="onPointerDown"
+      @pointermove="onPointerMove"
+      @pointerup="endStroke"
+      @pointercancel="endStroke"
+      @lostpointercapture="endStroke"
+      @contextmenu.prevent
+    />
+    <img
+      v-if="backgroundImage"
+      class="background-overlay"
+      :src="backgroundImage"
+      alt=""
+      aria-hidden="true"
+      :draggable="false"
+    />
+    <div class="boid-overlay" aria-hidden="true">
+      <Emoji
+        v-for="boid in boids"
+        :key="boid.id"
+        class="boid"
+        :emoji="boid.emoji"
+        :style="{ left: `${Math.round(boid.x + emojiInset)}px`, top: `${Math.round(boid.y + emojiInset)}px`, width: `${BOID_EMOJI_SIZE}px`, height: `${BOID_EMOJI_SIZE}px` }"
+      />
+    </div>
+    <div class="emitter-overlay" aria-hidden="true">
+      <img
+        v-for="cursor in emitterCursors"
+        :key="cursor.slot"
+        class="emitter-cursor"
+        :src="EMITTER_CURSOR_SRC"
+        alt=""
+        :draggable="false"
+        :style="{
+          left: `${Math.round(cursor.x) - EMITTER_CURSOR_HOTSPOT}px`,
+          top: `${-EMITTER_CURSOR_HOTSPOT}px`,
+          width: `${EMITTER_CURSOR_SIZE}px`,
+          height: `${EMITTER_CURSOR_SIZE}px`,
+          opacity: cursor.opacity,
+        }"
+      />
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.life-world {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 512px;
+}
+
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  mix-blend-mode: difference;
+  transform: scaleY(-1);
+  image-rendering: pixelated;
+  pointer-events: none;
+  user-select: none;
+}
+
+.boid-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.boid {
+  position: absolute;
+  max-width: none;
+  image-rendering: pixelated;
+}
+
+.emitter-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.emitter-cursor {
+  position: absolute;
+  max-width: none;
+  image-rendering: pixelated;
+}
+</style>
