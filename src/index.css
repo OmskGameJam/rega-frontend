@@ -2,12 +2,12 @@
 
 @font-face {
   font-family: "Regular12";
-  src: url("/win-55-ui/font/LiberationSans-Regular-12.ttf");
+  src: url("/win-55-ui/font/Standard-Regular-12.ttf");
 }
 
 @font-face {
   font-family: "Bold12";
-  src: url("/win-55-ui/font/LiberationSans-Bold-12.ttf");
+  src: url("/win-55-ui/font/Standard-Bold-12.ttf");
 }
 
 
@@ -38,6 +38,10 @@ ul ul {
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  background-color: #000044;
 }
 
 

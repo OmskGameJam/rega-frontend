@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { Box, RichText, Typography, Window } from 'win-55-ui-vue'
 import { globalAxios } from '../net/axios'
+import { useCursorActivity } from '../composable/useCursorActivity'
 import { YM_COUNTER } from '../helpers/constants'
 import IntGrid from '../components/IntGrid.vue'
 import { customEmojiDirective as vEmoji } from 'win-55-ui-vue';
@@ -20,6 +21,7 @@ interface ITeamData {
 }
 
 const loading = ref(true)
+useCursorActivity(loading, 'progress')
 const teams = ref<ITeamData[]>([])
 const activeTeam = ref(0)
 const animate = ref(false)
@@ -33,7 +35,6 @@ onMounted(() => {
   globalAxios.get('/rega')
     .then((d) => {
       teams.value = d.data
-      loading.value = false
       activeTeam.value = parseInt(window.localStorage.getItem('my-team') ?? '') || 0
 
       requestAnimationFrame(() => {
@@ -42,6 +43,9 @@ onMounted(() => {
     })
     .catch(() => {
       alert('Не удалось загрузить команды :(')
+    })
+    .finally(() => {
+      loading.value = false
     })
 })
 
@@ -54,7 +58,7 @@ function trimTeamName(n: string) {
 </script>
 
 <template>
-  <Box v-if="loading" type="panel-d-2" extra-class="d-box-black">
+  <Box v-if="loading" type="panel-d-2" extra-class="d-box-black" role="status" aria-live="polite" :aria-busy="loading">
     Загружаем команды...
   </Box>
 

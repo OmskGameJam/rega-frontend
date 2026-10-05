@@ -1,1 +1,1 @@
-export const EVENT_NOW = 'varenie-2026-07'
+export const EVENT_NOW = 'old60'

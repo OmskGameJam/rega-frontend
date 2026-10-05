@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type CSSProperties } from 'vue'
-import { BaseInput } from 'win-55-ui-vue'
+import { BaseInput, RichInput } from 'win-55-ui-vue'
 
 withDefaults(defineProps<{
   modelValue: string
@@ -26,14 +26,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseInput
-    ref="inputRef"
-    :model-value="modelValue"
-    :placeholder="placeholder"
-    :max-length="maxLength"
-    :extra-styles="extraStyles"
-    show-emoji-button
-    @update:model-value="emit('update:modelValue', $event)"
-    @keydown.enter="emit('enter')"
-  />
+  <div style="display: contents" @keydown.enter.stop.prevent="emit('enter')">
+    <RichInput
+      ref="inputRef"
+      :model-value="modelValue"
+      :placeholder="placeholder"
+      :max-length="maxLength"
+      :extra-styles="extraStyles"
+      show-emoji-button
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+  </div>
 </template>
